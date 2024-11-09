@@ -8,6 +8,7 @@
 
 /* Begin PBXFileReference section */
 		9132EB652CDF7EC000286ACE /* PlanXTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlanXTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		91ACA4022CDFFF8A0043911B /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Core; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -32,6 +33,7 @@
 		9132EB5C2CDF7EC000286ACE = {
 			isa = PBXGroup;
 			children = (
+				91ACA4022CDFFF8A0043911B /* Core */,
 				9132EB672CDF7EC000286ACE /* PlanXTrack */,
 				9132EB662CDF7EC000286ACE /* Products */,
 			);
