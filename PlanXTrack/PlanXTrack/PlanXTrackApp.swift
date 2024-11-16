@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import UI
 
 @main
 struct PlanXTrackApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AppView()
         }
     }
 }

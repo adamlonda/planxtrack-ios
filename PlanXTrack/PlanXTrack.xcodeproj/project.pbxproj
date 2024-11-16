@@ -6,9 +6,14 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		91AF27432CE8AF5500B99E20 /* UI in Frameworks */ = {isa = PBXBuildFile; productRef = 91AF27422CE8AF5500B99E20 /* UI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		9132EB652CDF7EC000286ACE /* PlanXTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlanXTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91ACA4022CDFFF8A0043911B /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Core; sourceTree = "<group>"; };
+		91D588822CE8A7FB008D533B /* UI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = UI; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -24,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91AF27432CE8AF5500B99E20 /* UI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -34,7 +40,9 @@
 			isa = PBXGroup;
 			children = (
 				91ACA4022CDFFF8A0043911B /* Core */,
+				91D588822CE8A7FB008D533B /* UI */,
 				9132EB672CDF7EC000286ACE /* PlanXTrack */,
+				91AF27362CE8ACA200B99E20 /* Frameworks */,
 				9132EB662CDF7EC000286ACE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -45,6 +53,13 @@
 				9132EB652CDF7EC000286ACE /* PlanXTrack.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		91AF27362CE8ACA200B99E20 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -68,6 +83,7 @@
 			);
 			name = PlanXTrack;
 			packageProductDependencies = (
+				91AF27422CE8AF5500B99E20 /* UI */,
 			);
 			productName = PlanXTrack;
 			productReference = 9132EB652CDF7EC000286ACE /* PlanXTrack.app */;
@@ -99,6 +115,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				91BA36162CDF985A000D75AB /* XCRemoteSwiftPackageReference "SwiftLint" */,
+				91AF27412CE8AF5500B99E20 /* XCLocalSwiftPackageReference "UI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9132EB662CDF7EC000286ACE /* Products */;
@@ -348,6 +365,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		91AF27412CE8AF5500B99E20 /* XCLocalSwiftPackageReference "UI" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = UI;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		91BA36162CDF985A000D75AB /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -360,6 +384,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		91AF27422CE8AF5500B99E20 /* UI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = UI;
+		};
 		91BA36172CDF986D000D75AB /* SwiftLintBuildToolPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 91BA36162CDF985A000D75AB /* XCRemoteSwiftPackageReference "SwiftLint" */;
