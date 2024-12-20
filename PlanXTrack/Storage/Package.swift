@@ -3,43 +3,45 @@
 import PackageDescription
 
 let package = Package(
-    name: "Core",
+    name: "Storage",
     platforms: [.macOS(.v14), .iOS(.v18)],
     products: [
         .library(
-            name: "Core",
+            name: "Storage",
             targets: [
-                "Core",
-                "CoreAssemble",
-                "CoreTesting",
+                "Storage",
+                "StorageMocks",
+                "StorageImplementation"
             ]
         ),
     ],
     dependencies: [
-        .package(name: "Storage", path: "../Storage"),
+        .package(name: "Model", path: "../Model"),
         .package(url: "https://github.com/realm/SwiftLint", from: "0.57.1")
     ],
     targets: [
         .target(
-            name: "Core",
-            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
-        ),
-        .target(
-            name: "CoreAssemble",
+            name: "Storage",
             dependencies: [
-                .product(name: "Storage", package: "Storage")
+                .product(name: "Model", package: "Model")
             ],
             plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
         ),
         .target(
-            name: "CoreTesting",
-            dependencies: ["Core"],
+            name: "StorageMocks",
+            dependencies: [
+                "Storage",
+                .product(name: "Model", package: "Model")
+            ],
             plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
         ),
-        .testTarget(
-            name: "CoreTests",
-            dependencies: ["Core"],
+        .target(
+            name: "StorageImplementation",
+            dependencies: [
+                "Storage",
+                .product(name: "Model", package: "Model")
+            ],
             plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
-        ),
+        )
     ]
 )

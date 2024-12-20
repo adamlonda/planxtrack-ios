@@ -3,24 +3,20 @@
 import PackageDescription
 
 let package = Package(
-    name: "UI",
-    platforms: [.iOS(.v18)],
+    name: "Model",
+    platforms: [.macOS(.v14), .iOS(.v18)],
     products: [
         .library(
-            name: "UI",
-            targets: ["UI"]
+            name: "Model",
+            targets: ["Model"]
         ),
     ],
     dependencies: [
-        .package(name: "Reducers", path: "../Reducers"),
         .package(url: "https://github.com/realm/SwiftLint", from: "0.57.1")
     ],
     targets: [
         .target(
-            name: "UI",
-            dependencies: [
-                .product(name: "Reducers", package: "Reducers")
-            ],
+            name: "Model",
             plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
         ),
     ]

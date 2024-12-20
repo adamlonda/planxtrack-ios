@@ -6,9 +6,9 @@
 //
 
 public protocol ReducerType {
-    associatedtype State
+    associatedtype State: Equatable
     associatedtype Action: Sendable
-    associatedtype Dependencies
 
+    init(dependencies: Dependencies)
     func reduce(state: inout State, action: Action) -> Effect<Action>
 }
