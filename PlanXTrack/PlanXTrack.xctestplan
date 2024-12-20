@@ -1,0 +1,83 @@
+{
+  "configurations" : [
+    {
+      "id" : "623D50FB-53F3-434D-91D4-C59C0166F230",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:PlanXTrack.xcodeproj",
+      "identifier" : "9132EB642CDF7EC000286ACE",
+      "name" : "PlanXTrack"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Reducers",
+        "identifier" : "ReducersTests",
+        "name" : "ReducersTests"
+      }
+    },
+    {
+      "selectedTests" : {
+        "suites" : [
+          {
+            "name" : "AssembleTests",
+            "testFunctions" : [
+              "availabilityCheckingType()",
+              "planxStorageType()"
+            ]
+          },
+          {
+            "name" : "DependenciesTests",
+            "testFunctions" : [
+              "dependenciesOverride()",
+              "registeredDependencies()"
+            ]
+          }
+        ],
+        "xctestClasses" : [
+          {
+            "name" : "AssembleTests",
+            "xctestMethods" : [
+              "availabilityCheckingType()",
+              "planxStorageType()"
+            ]
+          },
+          {
+            "name" : "DependenciesTests",
+            "xctestMethods" : [
+              "dependenciesOverride()",
+              "registeredDependencies()"
+            ]
+          }
+        ]
+      },
+      "target" : {
+        "containerPath" : "container:Core",
+        "identifier" : "CoreTests",
+        "name" : "CoreTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Convenience",
+        "identifier" : "ConvenienceTests",
+        "name" : "ConvenienceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Storage",
+        "identifier" : "StorageTests",
+        "name" : "StorageTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -42,6 +42,15 @@ let package = Package(
                 .product(name: "Model", package: "Model")
             ],
             plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
+        ),
+        .testTarget(
+            name: "StorageTests",
+            dependencies: [
+                "Storage",
+                "StorageImplementation",
+                "StorageMocks"
+            ],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
         )
     ]
 )

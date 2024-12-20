@@ -10,20 +10,34 @@ import Storage
 import StorageImplementation
 import StorageMocks
 
+// MARK: - Runtime
+
 extension Dependencies {
-    public static var runtime: Self {
+    public static var runtime: Dependencies {
         get async {
-            await .init()
-                .withSingleton(PlanxRepository.self) { LivePlanxRepository() }
+            let factory = await Dependencies()
+                .withSingleton(AvailabilityChecking.self) { LiveAvailabilityChecking() }
+                .withSingleton(Authorizing.self) { LiveAuthorizing() }
+
+            return await factory.withSingleton(PlanxStorage.self) {
+                LivePlanxStorage(checker: await factory.resolve(), authorizer: await factory.resolve())
+            }
         }
     }
 }
 
+// MARK: - Mocks
+
 extension Dependencies {
-    public static var mocked: Self {
+    public static var mocked: Dependencies {
         get async {
-            await .runtime
-                .with(PlanxRepository.self) { .mock }
+            await Dependencies.runtime
+                .with(PlanxStorage.self) { .empty }
         }
+    }
+
+    public static func mocked(with storage: PlanxStorage) async -> Dependencies {
+        await .mocked
+            .with(PlanxStorage.self) { storage }
     }
 }

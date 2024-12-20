@@ -13,6 +13,8 @@ public actor Dependencies: Sendable {
     private var factories = [String: () async -> Sendable]()
     private var singletons = [String: Sendable]()
 
+    // MARK: - Registration
+
     @discardableResult public func with<T: Sendable>(
         _ type: T.Type,
         factory: @escaping () async -> T
@@ -33,6 +35,8 @@ public actor Dependencies: Sendable {
         return self
     }
 
+    // MARK: - Recolving
+
     public func resolve<T: Sendable>(_ type: T.Type) async -> T {
         let key = String(describing: type)
 
@@ -48,5 +52,9 @@ public actor Dependencies: Sendable {
         }
 
         fatalError("Unregistered dependency: \(key) ‼️")
+    }
+
+    public func resolve<T: Sendable>() async -> T {
+        await resolve(T.self)
     }
 }

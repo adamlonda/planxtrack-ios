@@ -18,18 +18,32 @@ public struct AppView: View {
     }
 
     public var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
-        .onAppear {
-            store.send(.onAppear)
+        content
+            .padding()
+            .onAppear {
+                store.send(.onAppear)
+            }
+    }
+
+    @ViewBuilder var content: some View {
+        switch store.state {
+        case .idle:
+            Text("Should not be visible")
+        case .loading:
+            Text("Loading")
+        case .loaded([]):
+            Text("No data, yet")
+        case .loaded(let data):
+            Text("Loaded \(data.count) items")
+        case .healthKitNotAvailable:
+            Text("HealthKit not available")
+        case .unauthorizedHealthKitAccess:
+            Text("Unauthorized HealthKit access")
         }
     }
 }
+
+// MARK: - Previews
 
 #Preview {
     WithReducer(.idle,

@@ -14,15 +14,29 @@
 		9101DA7F2CE92944000BF1B5 /* Model */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Model; sourceTree = "<group>"; };
 		9101DA802CE92C47000BF1B5 /* Storage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Storage; sourceTree = "<group>"; };
 		9132EB652CDF7EC000286ACE /* PlanXTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlanXTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		917A5FC52D16F80000E97FD0 /* PlanXTrack.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = PlanXTrack.xctestplan; sourceTree = "<group>"; };
 		91ACA4022CDFFF8A0043911B /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Core; sourceTree = "<group>"; };
 		91AF27442CE8B54800B99E20 /* Reducers */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Reducers; sourceTree = "<group>"; };
 		91D588822CE8A7FB008D533B /* UI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = UI; sourceTree = "<group>"; };
 		91DDD9C62CFC9F260064FE43 /* Convenience */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Convenience; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		91F1B8122D1998910075A90A /* Exceptions for "PlanXTrack" folder in "PlanXTrack" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 9132EB642CDF7EC000286ACE /* PlanXTrack */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		9132EB672CDF7EC000286ACE /* PlanXTrack */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				91F1B8122D1998910075A90A /* Exceptions for "PlanXTrack" folder in "PlanXTrack" target */,
+			);
 			path = PlanXTrack;
 			sourceTree = "<group>";
 		};
@@ -43,6 +57,7 @@
 		9132EB5C2CDF7EC000286ACE = {
 			isa = PBXGroup;
 			children = (
+				917A5FC52D16F80000E97FD0 /* PlanXTrack.xctestplan */,
 				91DDD9C62CFC9F260064FE43 /* Convenience */,
 				91ACA4022CDFFF8A0043911B /* Core */,
 				9101DA7F2CE92944000BF1B5 /* Model */,
@@ -289,13 +304,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PlanXTrack/PlanXTrack.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 6KGZ86RN37;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PlanXTrack/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = PlanXTrack;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "This app uses HealthKit to track and manage your workout data.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "This app uses HealthKit to track and manage your workout data.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -322,13 +342,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PlanXTrack/PlanXTrack.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 6KGZ86RN37;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PlanXTrack/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = PlanXTrack;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "This app uses HealthKit to track and manage your workout data.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "This app uses HealthKit to track and manage your workout data.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

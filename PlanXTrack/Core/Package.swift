@@ -38,7 +38,10 @@ let package = Package(
         ),
         .testTarget(
             name: "CoreTests",
-            dependencies: ["Core"],
+            dependencies: [
+                "Core",
+                "CoreAssemble"
+            ],
             plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
         ),
     ]

@@ -27,8 +27,13 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      shouldAutocreateTestPlan = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES">
+      <TestPlans>
+         <TestPlanReference
+            reference = "container:PlanXTrack.xctestplan"
+            default = "YES">
+         </TestPlanReference>
+      </TestPlans>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -51,6 +56,18 @@
             </BuildableReference>
             <SelectedTests>
                <Test
+                  Identifier = "AssembleTests/availabilityCheckingType()">
+               </Test>
+               <Test
+                  Identifier = "AssembleTests/availabilityCheckingType()">
+               </Test>
+               <Test
+                  Identifier = "AssembleTests/planxStorageType()">
+               </Test>
+               <Test
+                  Identifier = "AssembleTests/planxStorageType()">
+               </Test>
+               <Test
                   Identifier = "DependenciesTests/dependenciesOverride()">
                </Test>
                <Test
@@ -66,6 +83,16 @@
                BuildableName = "ConvenienceTests"
                BlueprintName = "ConvenienceTests"
                ReferencedContainer = "container:Convenience">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "StorageTests"
+               BuildableName = "StorageTests"
+               BlueprintName = "StorageTests"
+               ReferencedContainer = "container:Storage">
             </BuildableReference>
          </TestableReference>
       </Testables>
