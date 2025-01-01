@@ -43,4 +43,8 @@ public extension PlanxStorage where Self == PlanxStorageMock {
     static var unauthorizedHealthKitAccess: Self {
         .init(.failure(.unauthorizedHealthKitAccess))
     }
+
+    static var loadingError: Self {
+        .init(.failure(.loadingError))
+    }
 }

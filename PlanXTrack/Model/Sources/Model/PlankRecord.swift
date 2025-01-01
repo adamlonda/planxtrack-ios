@@ -5,4 +5,14 @@
 //  Created by Adam Londa on 16.11.2024.
 //
 
-public struct PlankRecord: Sendable, Equatable {}
+import Foundation
+
+public struct PlankRecord: Sendable, Equatable {
+    public let date: Date
+    public let duration: TimeInterval
+
+    public init(date: Date, duration: TimeInterval) {
+        self.date = date
+        self.duration = duration
+    }
+}

@@ -29,7 +29,11 @@
           {
             "name" : "AssembleTests",
             "testFunctions" : [
+              "authorizingType()",
               "availabilityCheckingType()",
+              "executionType()",
+              "healthKitStoreType()",
+              "loadingType()",
               "planxStorageType()"
             ]
           },

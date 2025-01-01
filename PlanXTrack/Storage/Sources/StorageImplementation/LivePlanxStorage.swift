@@ -11,10 +11,12 @@ import Storage
 public final class LivePlanxStorage: PlanxStorage {
     private let checker: AvailabilityChecking
     private let authorizer: Authorizing
+    private let loader: Loading
 
-    public init(checker: AvailabilityChecking, authorizer: Authorizing) {
+    public init(checker: AvailabilityChecking, authorizer: Authorizing, loader: Loading) {
         self.checker = checker
         self.authorizer = authorizer
+        self.loader = loader
     }
 
     public func load() async throws -> [PlankRecord] {
@@ -22,6 +24,6 @@ public final class LivePlanxStorage: PlanxStorage {
             throw StorageError.healthKitNotAvailable
         }
         try await authorizer.authorizeHealthKit()
-        return [] // TODO: Real data 🚧
+        return try await loader.load()
     }
 }

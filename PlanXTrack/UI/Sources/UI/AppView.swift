@@ -39,6 +39,8 @@ public struct AppView: View {
             Text("HealthKit not available")
         case .unauthorizedHealthKitAccess:
             Text("Unauthorized HealthKit access")
+        case .loadingError:
+            Text("Loading error")
         }
     }
 }

@@ -9,12 +9,14 @@ import HealthKit
 import Storage
 
 public final class LiveAuthorizing: Authorizing {
-    private let healthStore = HKHealthStore()
+    private let healthStore: HKHealthStore
 
     private let readTypes: Set<HKSampleType> = [HKObjectType.workoutType()]
     private let writeTypes: Set<HKSampleType> = [HKObjectType.workoutType()]
 
-    public init() {}
+    public init(healthStore: HKHealthStore) {
+        self.healthStore = healthStore
+    }
 
     public func authorizeHealthKit() async throws {
         do {

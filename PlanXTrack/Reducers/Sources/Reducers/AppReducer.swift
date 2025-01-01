@@ -17,12 +17,14 @@ import Storage
         case loaded([PlankRecord])
         case healthKitNotAvailable
         case unauthorizedHealthKitAccess
+        case loadingError
     }
     public enum Action: Sendable {
         case onAppear
         case display([PlankRecord])
         case healthKitNotAvailable
         case unauthorizedHealthKitAccess
+        case loadingError
         case unknownError
     }
     @Inject var storage: PlanxStorage
@@ -39,6 +41,8 @@ import Storage
             return reduceHealthKitNotAvailable(&state)
         case .unauthorizedHealthKitAccess:
             return reduceUnauthorizedHealthKitAccess(&state)
+        case .loadingError:
+            return reduceLoadingError(&state)
         case .unknownError:
             return .none
         }
@@ -54,6 +58,8 @@ import Storage
                 return .healthKitNotAvailable
             } catch StorageError.unauthorizedHealthKitAccess {
                 return .unauthorizedHealthKitAccess
+            } catch StorageError.loadingError {
+                return .loadingError
             } catch {
                 return .unknownError
             }
@@ -72,6 +78,11 @@ import Storage
 
     private func reduceUnauthorizedHealthKitAccess(_ state: inout State) -> Effect<Action> {
         state = .unauthorizedHealthKitAccess
+        return .none
+    }
+
+    private func reduceLoadingError(_ state: inout State) -> Effect<Action> {
+        state = .loadingError
         return .none
     }
 }

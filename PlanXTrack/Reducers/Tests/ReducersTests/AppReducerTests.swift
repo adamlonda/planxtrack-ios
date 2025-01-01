@@ -49,4 +49,15 @@ import Testing
         await store.change(of: \.state)
         #expect(store.state == .unauthorizedHealthKitAccess)
     }
+
+    @Test func onAppearLoadingError() async {
+        let store = Store<AppReducer>(initialState: .idle, dependencies: await .mocked(with: .loadingError))
+        store.send(.onAppear)
+
+        await store.change(of: \.state)
+        #expect(store.state == .loading)
+
+        await store.change(of: \.state)
+        #expect(store.state == .loadingError)
+    }
 }
