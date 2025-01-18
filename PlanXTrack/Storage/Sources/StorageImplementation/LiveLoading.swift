@@ -19,22 +19,34 @@ public final class LiveLoading: Loading {
     }
 
     public func load() async throws -> [PlankRecord] {
-        let plankPredicate = HKQuery.predicateForWorkouts(with: .coreTraining)
-        let descriptor = HKSampleQueryDescriptor(
-            predicates: [.workout(plankPredicate)],
-            sortDescriptors: [SortDescriptor(\.endDate, order: .reverse)],
-            limit: .loadLimit
+        let now = Date.now // TODO: Make .now injectable
+        let threeWeeksAgo = Calendar.current.date(byAdding: .day, value: -21, to: now)! // TODO: Make Calendar injectable
+
+        let datePredicate = HKQuery.predicateForSamples(
+            withStart: threeWeeksAgo,
+            end: now,
+            options: .strictStartDate
         )
+        let descriptor = HKSampleQueryDescriptor(
+            predicates: [.workout(datePredicate)],
+            sortDescriptors: [SortDescriptor(\.endDate, order: .reverse)]
+        )
+
         do {
             let workouts = try await exec.execute(descriptor, with: healthStore)
-            let planxTrackWorkouts = workouts.filter {
-                $0.metadata?[HKMetadataKeyWorkoutBrandName] as? String == "PlanXTrack"
-            }
-            return planxTrackWorkouts.map {
-                PlankRecord(date: $0.endDate, duration: $0.endDate.timeIntervalSince($0.startDate))
-            }
+            return workouts.planxTrackCoreWorkoutsOnly()
+                .map { .init(date: $0.endDate, duration: $0.endDate.timeIntervalSince($0.startDate)) }
         } catch {
             throw StorageError.loadingError
+        }
+    }
+}
+
+fileprivate extension [HKWorkout] {
+    func planxTrackCoreWorkoutsOnly() -> Self {
+        filter {
+            $0.workoutActivityType == .coreTraining
+                && $0.metadata?[HKMetadataKeyWorkoutBrandName] as? String == .brandName
         }
     }
 }

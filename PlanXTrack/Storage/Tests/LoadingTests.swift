@@ -20,9 +20,15 @@ struct LoadingTests {
         let endYesterday = endToday.addingTimeInterval(-24 * 60 * 60)
         let durationYesterday: TimeInterval = 120
 
+        let endMonthAgo = endToday.addingTimeInterval(-4 * 7 * 24 * 60 * 60)
+        let durationMonthAgo: TimeInterval = 60
+
         let workouts = [
-            HKWorkout(duration: durationToday, end: endToday),
-            HKWorkout(duration: durationYesterday, end: endYesterday)
+            HKWorkout(activityType: .gymnastics),
+            HKWorkout(brandName: "XXX Workout"),
+            HKWorkout(duration: durationMonthAgo, end: endMonthAgo),
+            HKWorkout(duration: durationYesterday, end: endYesterday),
+            HKWorkout(duration: durationToday, end: endToday)
         ]
         let expectedRecords: [PlankRecord] = [
             .init(date: endToday, duration: durationToday),
@@ -46,15 +52,20 @@ struct LoadingTests {
 // MARK: - Convenience
 
 private extension HKWorkout {
-    convenience init(duration: TimeInterval, end: Date) {
+    convenience init(
+        duration: TimeInterval = 0,
+        end: Date = .now,
+        activityType: HKWorkoutActivityType = .coreTraining,
+        brandName: String = .brandName
+    ) {
         self.init(
-            activityType: .coreTraining,
+            activityType: activityType,
             start: end.addingTimeInterval(-duration),
             end: end,
             workoutEvents: nil,
             totalEnergyBurned: nil,
             totalDistance: nil,
-            metadata: [HKMetadataKeyWorkoutBrandName: String.brandName]
+            metadata: [HKMetadataKeyWorkoutBrandName: brandName]
         )
     }
 }
