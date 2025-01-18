@@ -8,5 +8,5 @@
 import Foundation
 
 public protocol Recording: Sendable {
-    func healthKitRecord(from start: Date, to end: Date, id: UUID) async throws
+    func healthKitRecord(from start: Date, to end: Date, id: UUID) async throws // TODO: Feedback record
 }

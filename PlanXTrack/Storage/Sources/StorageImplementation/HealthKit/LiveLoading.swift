@@ -41,7 +41,12 @@ extension HKWorkout {
         else {
             return nil
         }
-        return PlankRecord(id: id, date: .init(endDate), duration: .init(endDate.secondsSince(startDate)))
+        return .init(
+            id: id,
+            date: .init(endDate),
+            duration: .init(endDate.secondsSince(startDate)),
+            feedback: .init(rawValue: nil)
+        )
     }
 
     var hasPlanXTrackBrand: Bool {
