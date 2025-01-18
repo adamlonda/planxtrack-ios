@@ -49,10 +49,17 @@ struct AssembleTests {
         await #expect(mocked.resolve(Loading.self) is LiveLoading)
     }
 
+    @Test func recordingType() async {
+        let runtime = await Dependencies.runtime
+        let mocked = await Dependencies.mocked
+        await #expect(runtime.resolve(Recording.self) is LiveRecording)
+        await #expect(mocked.resolve(Recording.self) is LiveRecording)
+    }
+
     @Test func planxStorageType() async {
         let runtime = await Dependencies.runtime
         let mocked = await Dependencies.mocked
         await #expect(runtime.resolve(PlanxStorage.self) is LivePlanxStorage)
-        await #expect(mocked.resolve(PlanxStorage.self) is EmptyPlanxStorageMock)
+        await #expect(mocked.resolve(PlanxStorage.self) is EmptyLoadPlanxStorageMock)
     }
 }

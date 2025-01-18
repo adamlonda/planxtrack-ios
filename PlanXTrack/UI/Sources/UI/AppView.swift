@@ -35,12 +35,6 @@ public struct AppView: View {
             Text("No data, yet")
         case .loaded(let data):
             Text("Loaded \(data.count) items")
-        case .healthKitNotAvailable:
-            Text("HealthKit not available")
-        case .unauthorizedHealthKitAccess:
-            Text("Unauthorized HealthKit access")
-        case .loadingError:
-            Text("Loading error")
         }
     }
 }

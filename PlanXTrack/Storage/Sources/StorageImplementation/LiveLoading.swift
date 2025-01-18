@@ -18,23 +18,33 @@ public final class LiveLoading: Loading {
         self.exec = exec
     }
 
-    public func load() async throws -> [PlankRecord] {
+    public func loadHealthKit() async -> [PlankRecord] {
         let plankPredicate = HKQuery.predicateForWorkouts(with: .coreTraining)
         let descriptor = HKSampleQueryDescriptor(
             predicates: [.workout(plankPredicate)],
-            sortDescriptors: [SortDescriptor(\.endDate, order: .reverse)],
-            limit: .loadLimit
+            sortDescriptors: [SortDescriptor(\.endDate, order: .reverse)]
         )
-        do {
-            let workouts = try await exec.execute(descriptor, with: healthStore)
-            let planxTrackWorkouts = workouts.filter {
-                $0.metadata?[HKMetadataKeyWorkoutBrandName] as? String == "PlanXTrack"
-            }
-            return planxTrackWorkouts.map {
-                PlankRecord(date: $0.endDate, duration: $0.endDate.timeIntervalSince($0.startDate))
-            }
-        } catch {
-            throw StorageError.loadingError
+        guard let workouts = try? await exec.execute(descriptor, with: healthStore) else {
+            return []
         }
+        return workouts
+            .filter { $0.hasPlanXTrackBrand }
+            .compactMap { $0.plankRecord }
+    }
+}
+
+extension HKWorkout {
+    var plankRecord: PlankRecord? {
+        guard
+            let stringID = metadata?[.recordID] as? String,
+            let id = PlankRecord.ID(uuidString: stringID)
+        else {
+            return nil
+        }
+        return PlankRecord(id: id, date: .init(endDate), duration: .init(endDate.secondsSince(startDate)))
+    }
+
+    var hasPlanXTrackBrand: Bool {
+        metadata?[HKMetadataKeyWorkoutBrandName] as? String == .brandName
     }
 }

@@ -9,27 +9,19 @@ import Model
 import Storage
 
 final class LoadingMock: Loading {
-    private let result: Result<[PlankRecord], StorageError>
+    private let result: [PlankRecord]
 
-    init(result: Result<[PlankRecord], StorageError>) {
+    init(result: [PlankRecord]) {
         self.result = result
     }
 
-    func load() async throws -> [PlankRecord] {
-        switch result {
-        case .success(let value):
-            return value
-        case .failure(let error):
-            throw error
-        }
+    func loadHealthKit() async -> [PlankRecord] {
+        result
     }
 }
 
 extension Loading where Self == LoadingMock {
     static var empty: Self {
-        .init(result: .success([]))
-    }
-    static var loadingError: Self {
-        .init(result: .failure(StorageError.loadingError))
+        .init(result: [])
     }
 }
