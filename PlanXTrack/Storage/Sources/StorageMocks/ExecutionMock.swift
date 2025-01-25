@@ -25,12 +25,37 @@ public final class ExecutionMock: Execution {
     ) async throws -> [T] {
         switch result {
         case .success(let workouts):
-            return workouts as? [T] ?? []
+            return workouts.filterAndSort(with: descriptor) as? [T] ?? []
         case .failure:
             throw MockError.mockError
         }
     }
 }
+
+// MARK: - Filter & Sort
+
+fileprivate extension [HKWorkout] {
+    func filterAndSort<T>(with descriptor: HKSampleQueryDescriptor<T>) -> Self {
+        guard let descriptor = descriptor as? HKSampleQueryDescriptor<HKWorkout> else {
+            return []
+        }
+
+        let filtered = filter { workout in
+            descriptor.predicates.allSatisfy { predicate in
+                predicate.nsPredicate?.evaluate(with: workout) ?? true
+            }
+        }
+        let sorted = descriptor.sortDescriptors.reduce(filtered) { partial, sortDescriptor in
+            partial.sorted { lhs, rhs in
+                sortDescriptor.compare(lhs, rhs) == .orderedAscending
+            }
+        }
+
+        return sorted
+    }
+}
+
+// MARK: - Convenience
 
 public extension Execution where Self == ExecutionMock {
     static func success(with workouts: [HKWorkout]) -> Self {

@@ -18,6 +18,7 @@
 		91ACA4022CDFFF8A0043911B /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Core; sourceTree = "<group>"; };
 		91AF27442CE8B54800B99E20 /* Reducers */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Reducers; sourceTree = "<group>"; };
 		91D588822CE8A7FB008D533B /* UI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = UI; sourceTree = "<group>"; };
+		91DA6B212D4507C30094FC9E /* Assemble */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Assemble; sourceTree = "<group>"; };
 		91DDD9C62CFC9F260064FE43 /* Convenience */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Convenience; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -58,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				917A5FC52D16F80000E97FD0 /* PlanXTrack.xctestplan */,
+				91DA6B212D4507C30094FC9E /* Assemble */,
 				91DDD9C62CFC9F260064FE43 /* Convenience */,
 				91ACA4022CDFFF8A0043911B /* Core */,
 				9101DA7F2CE92944000BF1B5 /* Model */,

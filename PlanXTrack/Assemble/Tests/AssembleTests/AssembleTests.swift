@@ -1,12 +1,12 @@
 //
 //  AssembleTests.swift
-//  Core
+//  Assemble
 //
 //  Created by Adam Londa on 21.12.2024.
 //
 
+import Assemble
 import Core
-import CoreAssemble
 import HealthKit
 import Storage
 import StorageImplementation
@@ -26,6 +26,13 @@ struct AssembleTests {
         let mocked = await Dependencies.mocked
         await #expect(runtime.resolve(Execution.self) is LiveExecution)
         await #expect(mocked.resolve(Execution.self) is LiveExecution)
+    }
+
+    @Test func calendarType() async {
+        let runtime = await Dependencies.runtime
+        let mocked = await Dependencies.mocked
+        await #expect(runtime.resolve(CalendarProviding.self) is LiveCalendarProviding)
+        await #expect(mocked.resolve(CalendarProviding.self) is LiveCalendarProviding)
     }
 
     @Test func availabilityCheckingType() async {

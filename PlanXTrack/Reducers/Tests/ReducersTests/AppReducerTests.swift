@@ -5,8 +5,8 @@
 //  Created by Adam Londa on 17.11.2024.
 //
 
+import Assemble
 import Core
-import CoreAssemble
 import CoreTesting
 @testable import Reducers
 import Storage

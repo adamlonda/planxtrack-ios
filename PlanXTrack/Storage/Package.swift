@@ -16,6 +16,7 @@ let package = Package(
         ),
     ],
     dependencies: [
+        .package(name: "Core", path: "../Core"),
         .package(name: "Model", path: "../Model"),
         .package(url: "https://github.com/realm/SwiftLint", from: "0.57.1")
     ],
@@ -39,6 +40,7 @@ let package = Package(
             name: "StorageImplementation",
             dependencies: [
                 "Storage",
+                .product(name: "Core", package: "Core"),
                 .product(name: "Model", package: "Model")
             ],
             plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]

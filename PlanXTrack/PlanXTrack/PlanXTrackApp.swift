@@ -5,8 +5,8 @@
 //  Created by Adam Londa on 09.11.2024.
 //
 
+import Assemble
 import Core
-import CoreAssemble
 import Reducers
 import SwiftUI
 import UI

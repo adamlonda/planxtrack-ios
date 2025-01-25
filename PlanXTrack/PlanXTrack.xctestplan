@@ -81,6 +81,13 @@
         "identifier" : "StorageTests",
         "name" : "StorageTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Assemble",
+        "identifier" : "AssembleTests",
+        "name" : "AssembleTests"
+      }
     }
   ],
   "version" : 1

@@ -1,6 +1,6 @@
 //
 //  Dependencies+Assemble.swift
-//  Core
+//  Assemble
 //
 //  Created by Adam Londa on 20.12.2024.
 //
@@ -23,8 +23,13 @@ extension Dependencies {
             await factory
                 .withSingleton(AvailabilityChecking.self) { LiveAvailabilityChecking() }
                 .withSingleton(Authorizing.self) { LiveAuthorizing(healthStore: await factory.resolve()) }
+                .withSingleton(CalendarProviding.self) { .live }
                 .withSingleton(Loading.self) {
-                    LiveLoading(healthStore: await factory.resolve(), exec: await factory.resolve())
+                    LiveLoading(
+                        healthStore: await factory.resolve(),
+                        exec: await factory.resolve(),
+                        calendar: await factory.resolve()
+                    )
                 }
 
             return await factory.withSingleton(PlanxStorage.self) {

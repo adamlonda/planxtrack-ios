@@ -7,8 +7,8 @@
 
 import Foundation
 
-public actor Dependencies: Sendable {
-    package init() {}
+public actor Dependencies {
+    public init() {}
 
     private var factories = [String: () async -> Sendable]()
     private var singletons = [String: Sendable]()

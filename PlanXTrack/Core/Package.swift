@@ -10,25 +10,16 @@ let package = Package(
             name: "Core",
             targets: [
                 "Core",
-                "CoreAssemble",
                 "CoreTesting",
             ]
         ),
     ],
     dependencies: [
-        .package(name: "Storage", path: "../Storage"),
         .package(url: "https://github.com/realm/SwiftLint", from: "0.57.1")
     ],
     targets: [
         .target(
             name: "Core",
-            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
-        ),
-        .target(
-            name: "CoreAssemble",
-            dependencies: [
-                .product(name: "Storage", package: "Storage")
-            ],
             plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
         ),
         .target(
@@ -39,8 +30,7 @@ let package = Package(
         .testTarget(
             name: "CoreTests",
             dependencies: [
-                "Core",
-                "CoreAssemble"
+                "Core"
             ],
             plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
         ),
