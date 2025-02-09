@@ -14,13 +14,19 @@ import StorageMocks
 import Testing
 
 struct LoadingTests {
-    @Test func successfulLoad() async throws {
+
+    // MARK: - Success
+
+    @Test(arguments: Feedback.allCases + [nil])
+    func successfulHealthKitLoad(expectedFeedback: Feedback?) async {
         let now = Date.now
         let calendar = Calendar.current
 
+        let idToday = UUID()
         let endToday = now
         let durationToday: TimeInterval = 140
 
+        let idYesterday = UUID()
         let endYesterday = calendar.date(byAdding: .day, value: -1, to: endToday)!
         let durationYesterday: TimeInterval = 120
 
@@ -28,15 +34,30 @@ struct LoadingTests {
         let durationMonthAgo: TimeInterval = 60
 
         let workouts = [
-            HKWorkout(activityType: .gymnastics),
-            HKWorkout(brandName: "XXX Workout"),
+            HKWorkout(duration: durationYesterday, end: endYesterday, activityType: .gymnastics),
+            HKWorkout(duration: durationYesterday, end: endYesterday, brandName: "XXX Workout"),
             HKWorkout(duration: durationMonthAgo, end: endMonthAgo),
-            HKWorkout(duration: durationYesterday, end: endYesterday),
-            HKWorkout(duration: durationToday, end: endToday)
+            HKWorkout(
+                id: idYesterday,
+                duration: durationYesterday,
+                end: endYesterday,
+                feedback: expectedFeedback?.rawValue ?? ""
+            ),
+            HKWorkout(id: idToday, duration: durationToday, end: endToday, feedback: expectedFeedback?.rawValue ?? "")
         ]
         let expectedRecords: [PlankRecord] = [
-            .init(date: endToday, duration: durationToday),
-            .init(date: endYesterday, duration: durationYesterday)
+            .init(
+                id: .init(idToday),
+                date: .init(endToday),
+                duration: .init(rawValue: .init(durationToday)),
+                feedback: .init(expectedFeedback)
+            ),
+            .init(
+                id: .init(idYesterday),
+                date: .init(endYesterday),
+                duration: .init(rawValue: .init(durationYesterday)),
+                feedback: .init(expectedFeedback)
+            )
         ]
 
         let sut = LiveLoading(
@@ -44,16 +65,17 @@ struct LoadingTests {
             exec: .success(with: workouts),
             calendar: .mock(calendar: calendar, now: now)
         )
-        let result = try await sut.load()
+        let result = await sut.loadHealthKit()
 
         #expect(result == expectedRecords)
     }
 
-    @Test func failedLoad() async {
+    // MARK: - Fail
+
+    @Test func failedHealthKitLoad() async {
         let sut = LiveLoading(healthStore: HKHealthStore(), exec: .failure, calendar: .mock())
-        await #expect(throws: StorageError.loadingError) {
-            try await sut.load()
-        }
+        let result = await sut.loadHealthKit()
+        #expect(result.isEmpty)
     }
 }
 
@@ -61,10 +83,12 @@ struct LoadingTests {
 
 private extension HKWorkout {
     convenience init(
-        duration: TimeInterval = 0,
-        end: Date = .now,
+        id: UUID = .init(),
+        duration: TimeInterval,
+        end: Date,
         activityType: HKWorkoutActivityType = .coreTraining,
-        brandName: String = .brandName
+        brandName: String = .brandName,
+        feedback: String = ""
     ) {
         self.init(
             activityType: activityType,
@@ -73,7 +97,11 @@ private extension HKWorkout {
             workoutEvents: nil,
             totalEnergyBurned: nil,
             totalDistance: nil,
-            metadata: [HKMetadataKeyWorkoutBrandName: brandName]
+            metadata: [
+                HKMetadataKeyWorkoutBrandName: brandName,
+                .recordID: id.uuidString,
+                .feedback: feedback
+            ]
         )
     }
 }

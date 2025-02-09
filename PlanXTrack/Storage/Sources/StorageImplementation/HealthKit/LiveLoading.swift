@@ -21,7 +21,7 @@ public final class LiveLoading: Loading {
         self.calendar = calendar
     }
 
-    public func load() async throws -> [PlankRecord] {
+    public func loadHealthKit() async -> [PlankRecord] {
         let now = calendar.now
         let threeWeeksAgo = calendar.current.date(byAdding: .day, value: -21, to: now)!
 
@@ -34,22 +34,32 @@ public final class LiveLoading: Loading {
             predicates: [.workout(datePredicate)],
             sortDescriptors: [SortDescriptor(\.endDate, order: .reverse)]
         )
-
-        do {
-            let workouts = try await exec.execute(descriptor, with: healthStore)
-            return workouts.planxTrackCoreWorkoutsOnly()
-                .map { .init(date: $0.endDate, duration: $0.endDate.timeIntervalSince($0.startDate)) }
-        } catch {
-            throw StorageError.loadingError
+        guard let workouts = try? await exec.execute(descriptor, with: healthStore) else {
+            return []
         }
+        return workouts
+            .filter { $0.workoutActivityType == .coreTraining && $0.hasPlanXTrackBrand }
+            .compactMap { $0.plankRecord }
     }
 }
 
-fileprivate extension [HKWorkout] {
-    func planxTrackCoreWorkoutsOnly() -> Self {
-        filter {
-            $0.workoutActivityType == .coreTraining
-                && $0.metadata?[HKMetadataKeyWorkoutBrandName] as? String == .brandName
+extension HKWorkout {
+    var plankRecord: PlankRecord? {
+        guard
+            let stringID = metadata?[.recordID] as? String,
+            let id = PlankRecord.ID(uuidString: stringID)
+        else {
+            return nil
         }
+        return .init(
+            id: id,
+            date: .init(endDate),
+            duration: .init(endDate.secondsSince(startDate)),
+            feedback: .init(rawValue: .init(rawValue: metadata?[.feedback] as? String ?? ""))
+        )
+    }
+
+    var hasPlanXTrackBrand: Bool {
+        metadata?[HKMetadataKeyWorkoutBrandName] as? String == .brandName
     }
 }

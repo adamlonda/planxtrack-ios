@@ -23,6 +23,7 @@ extension Dependencies {
             await factory
                 .withSingleton(AvailabilityChecking.self) { LiveAvailabilityChecking() }
                 .withSingleton(Authorizing.self) { LiveAuthorizing(healthStore: await factory.resolve()) }
+                .withSingleton(Recording.self) { LiveRecording(healthStore: await factory.resolve()) }
                 .withSingleton(CalendarProviding.self) { .live }
                 .withSingleton(Loading.self) {
                     LiveLoading(
@@ -31,12 +32,15 @@ extension Dependencies {
                         calendar: await factory.resolve()
                     )
                 }
+                .withSingleton(UUIDProviding.self) { .live }
 
             return await factory.withSingleton(PlanxStorage.self) {
                 LivePlanxStorage(
                     checker: await factory.resolve(),
                     authorizer: await factory.resolve(),
-                    loader: await factory.resolve()
+                    loader: await factory.resolve(),
+                    recording: await factory.resolve(),
+                    uuid: await factory.resolve()
                 )
             }
         }
@@ -49,7 +53,7 @@ extension Dependencies {
     public static var mocked: Dependencies {
         get async {
             await Dependencies.runtime
-                .with(PlanxStorage.self) { .empty }
+                .with(PlanxStorage.self) { .emptyLoad }
         }
     }
 

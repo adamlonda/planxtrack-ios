@@ -5,46 +5,41 @@
 //  Created by Adam Londa on 16.11.2024.
 //
 
+import Foundation
 import Model
 import Storage
 
 public class PlanxStorageMock: PlanxStorage, @unchecked Sendable {
-    private let result: Result<[PlankRecord], StorageError>
+    private let load: [PlankRecord]
+    private let record: Result<Void, StorageError>
 
-    init(_ result: Result<[PlankRecord], StorageError>) {
-        self.result = result
+    init(load: [PlankRecord], record: Result<Void, StorageError> = .success(())) {
+        self.load = load
+        self.record = record
     }
 
-    public func load() async throws -> [PlankRecord] {
-        switch result {
-        case .success(let records):
-            return records
+    public func load() async -> [PlankRecord] {
+        load
+    }
+
+    public func record(duration: TimeInterval, date: Date, feedback: Feedback?) async throws {
+        switch record {
+        case .success:
+            return
         case .failure(let error):
             throw error
         }
     }
 }
 
-public final class EmptyPlanxStorageMock: PlanxStorageMock, @unchecked Sendable {
+public final class EmptyLoadPlanxStorageMock: PlanxStorageMock, @unchecked Sendable {
     public convenience init() {
-        self.init(.success([]))
+        self.init(load: [])
     }
 }
 
 public extension PlanxStorage where Self == PlanxStorageMock {
-    static var empty: Self {
-        EmptyPlanxStorageMock()
-    }
-
-    static var healthKitNotAvailable: Self {
-        .init(.failure(.healthKitNotAvailable))
-    }
-
-    static var unauthorizedHealthKitAccess: Self {
-        .init(.failure(.unauthorizedHealthKitAccess))
-    }
-
-    static var loadingError: Self {
-        .init(.failure(.loadingError))
+    static var emptyLoad: Self {
+        EmptyLoadPlanxStorageMock()
     }
 }

@@ -8,5 +8,5 @@
 import Model
 
 public protocol Loading: Sendable {
-    func load() async throws -> [PlankRecord]
+    func loadHealthKit() async -> [PlankRecord]
 }

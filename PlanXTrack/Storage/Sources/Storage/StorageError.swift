@@ -6,7 +6,6 @@
 //
 
 public enum StorageError: Error {
-    case healthKitNotAvailable
     case unauthorizedHealthKitAccess
-    case loadingError
+    case healthKitNotRecorded
 }

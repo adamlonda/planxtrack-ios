@@ -7,14 +7,12 @@
 
 extension String {
     static let brandName = "PlanXTrack"
+    static let recordID = "PlanXTrackRecordID"
+    static let feedback = "PlanXTrackFeedback"
 }
 
 extension CVarArg where Self == String {
     static var brandName: Self {
         .brandName
     }
-}
-
-extension Int {
-    static let loadLimit = 21
 }
