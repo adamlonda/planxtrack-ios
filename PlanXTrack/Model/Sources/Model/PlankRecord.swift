@@ -9,7 +9,6 @@ import Foundation
 import Tagged
 import TaggedTime
 
-// TODO: Mocking 🚧
 public struct PlankRecord: Sendable, Equatable, Identifiable {
     public typealias Duration = Tagged<Self, Seconds<TimeInterval>>
     public typealias Date = Tagged<Self, Foundation.Date>

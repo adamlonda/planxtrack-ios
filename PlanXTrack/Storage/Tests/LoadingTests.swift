@@ -45,7 +45,7 @@ struct LoadingTests {
             ),
             HKWorkout(id: idToday, duration: durationToday, end: endToday, feedback: expectedFeedback?.rawValue ?? "")
         ]
-        let expectedRecords: [PlankRecord] = [
+        let expectedRecords: [PlankRecord] = [ // TODO: Extract to ModelMocks 💡
             .init(
                 id: .init(idToday),
                 date: .init(endToday),
