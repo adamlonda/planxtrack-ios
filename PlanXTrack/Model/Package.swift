@@ -8,7 +8,10 @@ let package = Package(
     products: [
         .library(
             name: "Model",
-            targets: ["Model"]
+            targets: [
+                "Model",
+                "ModelMocks"
+            ]
         ),
     ],
     dependencies: [
@@ -24,5 +27,10 @@ let package = Package(
             ],
             plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
         ),
+        .target(
+            name: "ModelMocks",
+            dependencies: ["Model"],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
+        )
     ]
 )

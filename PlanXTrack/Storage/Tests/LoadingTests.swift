@@ -8,6 +8,7 @@
 import Core
 import HealthKit
 import Model
+import ModelMocks
 @testable import StorageImplementation
 import StorageMocks
 import Testing
@@ -21,15 +22,18 @@ struct LoadingTests {
         let now = Date.now
         let calendar = Calendar.current
 
-        let idToday = UUID()
-        let endToday = now
-        let durationToday: TimeInterval = 140
+        let today = PlankRecord.today(now: now, feedback: expectedFeedback)
+        let yesterday = PlankRecord.yesterday(now: now, calendar: calendar, feedback: expectedFeedback)
 
-        let idYesterday = UUID()
-        let endYesterday = calendar.date(byAdding: .day, value: -1, to: endToday)!
-        let durationYesterday: TimeInterval = 120
+        let idToday = today.id.rawValue
+        let durationToday = today.duration.rawValue.rawValue
+        let endToday = today.date.rawValue
 
-        let endMonthAgo = calendar.date(byAdding: .month, value: -1, to: endToday)!
+        let idYesterday = yesterday.id.rawValue
+        let durationYesterday = yesterday.duration.rawValue.rawValue
+        let endYesterday = yesterday.date.rawValue
+
+        let endMonthAgo = calendar.date(byAdding: .month, value: -1, to: today.date.rawValue)!
         let durationMonthAgo: TimeInterval = 60
 
         let workouts = [
@@ -44,20 +48,7 @@ struct LoadingTests {
             ),
             HKWorkout(id: idToday, duration: durationToday, end: endToday, feedback: expectedFeedback?.rawValue ?? "")
         ]
-        let expectedRecords: [PlankRecord] = [
-            .init(
-                id: .init(idToday),
-                date: .init(endToday),
-                duration: .init(rawValue: .init(durationToday)),
-                feedback: .init(expectedFeedback)
-            ),
-            .init(
-                id: .init(idYesterday),
-                date: .init(endYesterday),
-                duration: .init(rawValue: .init(durationYesterday)),
-                feedback: .init(expectedFeedback)
-            )
-        ]
+        let expectedRecords = [today, yesterday]
 
         let sut = LiveLoading(
             healthStore: HKHealthStore(),
