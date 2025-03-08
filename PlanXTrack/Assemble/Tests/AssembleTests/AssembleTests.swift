@@ -21,11 +21,11 @@ struct AssembleTests {
         #expect(store1 === store2)
     }
 
-    @Test func executionType() async {
+    @Test func healthKitExecutionType() async {
         let runtime = await Dependencies.runtime
         let mocked = await Dependencies.mocked
-        await #expect(runtime.resolve(Execution.self) is LiveExecution)
-        await #expect(mocked.resolve(Execution.self) is LiveExecution)
+        await #expect(runtime.resolve(HealthKitExecution.self) is LiveHealthKitExecution)
+        await #expect(mocked.resolve(HealthKitExecution.self) is LiveHealthKitExecution)
     }
 
     @Test func calendarType() async {
@@ -42,32 +42,39 @@ struct AssembleTests {
         await #expect(mocked.resolve(UUIDProviding.self) is LiveUUIDProviding)
     }
 
-    @Test func availabilityCheckingType() async {
+    @Test func healthKitAvailabilityCheckingType() async {
         let runtime = await Dependencies.runtime
         let mocked = await Dependencies.mocked
-        await #expect(runtime.resolve(AvailabilityChecking.self) is LiveAvailabilityChecking)
-        await #expect(mocked.resolve(AvailabilityChecking.self) is LiveAvailabilityChecking)
+        await #expect(runtime.resolve(HealthKitAvailabilityChecking.self) is LiveHealthKitAvailabilityChecking)
+        await #expect(mocked.resolve(HealthKitAvailabilityChecking.self) is LiveHealthKitAvailabilityChecking)
     }
 
-    @Test func authorizingType() async {
+    @Test func healthKitAuthorizingType() async {
         let runtime = await Dependencies.runtime
         let mocked = await Dependencies.mocked
-        await #expect(runtime.resolve(Authorizing.self) is LiveAuthorizing)
-        await #expect(mocked.resolve(Authorizing.self) is LiveAuthorizing)
+        await #expect(runtime.resolve(HealthKitAuthorizing.self) is LiveHealthKitAuthorizing)
+        await #expect(mocked.resolve(HealthKitAuthorizing.self) is LiveHealthKitAuthorizing)
     }
 
-    @Test func loadingType() async {
+    @Test func healthKitLoadingType() async {
         let runtime = await Dependencies.runtime
         let mocked = await Dependencies.mocked
-        await #expect(runtime.resolve(Loading.self) is LiveLoading)
-        await #expect(mocked.resolve(Loading.self) is LiveLoading)
+        await #expect(runtime.resolve(HealthKitLoading.self) is LiveHealthKitLoading)
+        await #expect(mocked.resolve(HealthKitLoading.self) is LiveHealthKitLoading)
     }
 
-    @Test func recordingType() async {
+    @Test func healthKitRecordingType() async {
         let runtime = await Dependencies.runtime
         let mocked = await Dependencies.mocked
-        await #expect(runtime.resolve(Recording.self) is LiveRecording)
-        await #expect(mocked.resolve(Recording.self) is LiveRecording)
+        await #expect(runtime.resolve(HealthKitRecording.self) is LiveHealthKitRecording)
+        await #expect(mocked.resolve(HealthKitRecording.self) is LiveHealthKitRecording)
+    }
+
+    @Test func cacheType() async {
+        let runtime = await Dependencies.runtime
+        let mocked = await Dependencies.mocked
+        await #expect(runtime.resolve(Cache.self) is LiveCache)
+        await #expect(mocked.resolve(Cache.self) is LiveCache)
     }
 
     @Test func planxStorageType() async {

@@ -11,38 +11,42 @@ import Model
 import Storage
 
 public final class LivePlanxStorage: PlanxStorage {
-    private let checker: AvailabilityChecking
-    private let authorizer: Authorizing
-    private let loader: Loading
+    private let healthKitChecker: HealthKitAvailabilityChecking
+    private let healthKitAuthorizer: HealthKitAuthorizing
+    private let healthKitLoader: HealthKitLoading
+    private let healthKitRecording: HealthKitRecording
 
-    private let recording: Recording
     private let uuid: UUIDProviding
+    private let cache: Cache
 
     // MARK: - Init
 
     public init(
-        checker: AvailabilityChecking,
-        authorizer: Authorizing,
-        loader: Loading,
-        recording: Recording,
-        uuid: UUIDProviding
+        healthKitChecker: HealthKitAvailabilityChecking,
+        healthKitAuthorizer: HealthKitAuthorizing,
+        healthKitLoader: HealthKitLoading,
+        healthKitRecording: HealthKitRecording,
+        uuid: UUIDProviding,
+        cache: Cache
     ) {
-        self.checker = checker
-        self.authorizer = authorizer
-        self.loader = loader
-        self.recording = recording
+        self.healthKitChecker = healthKitChecker
+        self.healthKitAuthorizer = healthKitAuthorizer
+        self.healthKitLoader = healthKitLoader
+        self.healthKitRecording = healthKitRecording
         self.uuid = uuid
+        self.cache = cache
     }
 
     // MARK: - Load
 
+    // TODO: Load from cache as well 🚧
     public func load() async -> [PlankRecord] {
-        guard checker.isHealthKitAvailable else {
+        guard healthKitChecker.isHealthKitAvailable else {
             return []
         }
         do {
-            try await authorizer.authorizeHealthKit()
-            return await loader.loadHealthKit()
+            try await healthKitAuthorizer.authorize()
+            return await healthKitLoader.load()
         } catch {
             return []
         }
@@ -51,15 +55,23 @@ public final class LivePlanxStorage: PlanxStorage {
     // MARK: - Record
 
     public func record(duration: TimeInterval, date: Date, feedback: Feedback?) async throws {
-        do {
-            try await recording.healthKitRecord(
-                from: date.addingTimeInterval(-duration),
-                to: date,
-                id: uuid.get(),
-                feedback: feedback?.rawValue ?? ""
+        let id = uuid.get()
+
+        async let healthKitTask: Void = healthKitRecording.record(
+            from: date.addingTimeInterval(-duration),
+            to: date,
+            id: id,
+            feedback: feedback?.rawValue ?? ""
+        )
+        async let cacheTask: Void = cache.save(
+            PlankRecord(
+                id: .init(id),
+                date: .init(date),
+                duration: .init(.init(duration)),
+                feedback: .init(feedback)
             )
-        } catch {
-        }
-        // TODO: Caching 🚧
+        )
+        _ = try? await healthKitTask
+        try await cacheTask
     }
 }

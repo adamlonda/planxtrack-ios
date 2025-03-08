@@ -1,5 +1,5 @@
 //
-//  LiveLoading.swift
+//  LiveHealthKitLoading.swift
 //  Storage
 //
 //  Created by Adam Londa on 28.12.2024.
@@ -10,18 +10,18 @@ import HealthKit
 import Model
 import Storage
 
-public final class LiveLoading: Loading {
+public final class LiveHealthKitLoading: HealthKitLoading {
     private let healthStore: HKHealthStore
-    private let exec: Execution
+    private let exec: HealthKitExecution
     private let calendar: CalendarProviding
 
-    public init(healthStore: HKHealthStore, exec: Execution, calendar: CalendarProviding) {
+    public init(healthStore: HKHealthStore, exec: HealthKitExecution, calendar: CalendarProviding) {
         self.healthStore = healthStore
         self.exec = exec
         self.calendar = calendar
     }
 
-    public func loadHealthKit() async -> [PlankRecord] {
+    public func load() async -> [PlankRecord] {
         let now = calendar.now
         let threeWeeksAgo = calendar.current.date(byAdding: .day, value: -21, to: now)!
 

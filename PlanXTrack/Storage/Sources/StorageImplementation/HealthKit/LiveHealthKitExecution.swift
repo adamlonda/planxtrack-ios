@@ -1,5 +1,5 @@
 //
-//  LiveExecution.swift
+//  LiveHealthKitExecution.swift
 //  Storage
 //
 //  Created by Adam Londa on 30.12.2024.
@@ -8,7 +8,7 @@
 import HealthKit
 import Storage
 
-public final class LiveExecution: Execution {
+public final class LiveHealthKitExecution: HealthKitExecution {
     public init() {}
 
     public func execute<T>(

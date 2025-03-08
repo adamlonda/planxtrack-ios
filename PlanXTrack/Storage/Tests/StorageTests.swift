@@ -14,81 +14,141 @@ import StorageImplementation
 import Testing
 
 struct StorageTests {
-    // MARK: - Load
+    // MARK: - HealthKit Load
 
     @Test func loadHealthKitNotAvailable() async {
-        let sut = LivePlanxStorage(checker: .unavailable)
+        let sut = LivePlanxStorage(healthKitChecker: .unavailable)
         let records = await sut.load()
         #expect(records.isEmpty)
     }
 
-    @Test func loadUnauthorized() async {
-        let sut = LivePlanxStorage(authorizer: .failure)
+    @Test func loadHealthKitUnauthorized() async {
+        let sut = LivePlanxStorage(healthKitAuthorizer: .failure)
         let records = await sut.load()
         #expect(records.isEmpty)
     }
 
-    @Test func loadSuccess() async {
-        let sut = LivePlanxStorage(loader: .empty)
+    @Test func loadHealthKitSuccess() async {
+        let sut = LivePlanxStorage(healthKitLoader: .empty)
         let records = await sut.load()
         #expect(records.isEmpty)
     }
 
-    // MARK: - Record
+    // MARK: - HealthKit Record
 
-    @Test(arguments: Feedback.allCases + [nil])
-    func recordSuccess(feedback: Feedback?) async throws {
+    @Test(arguments: zip([nil] + Feedback.allCases, [HealthKitRecordingSpy.success, .healthKitNotRecorded]))
+    func healthKitRecord(feedback: Feedback?, healthKitRecordingSpy: HealthKitRecordingSpy) async throws {
         let uuid = UUID()
         let duration: TimeInterval = 120
         let date: Date = .now
-        let recordingSpy: RecordingSpy = .success
 
-        let sut = LivePlanxStorage(recording: recordingSpy, uuid: .mock(uuid: uuid))
+        let sut = LivePlanxStorage(healthKitRecording: healthKitRecordingSpy, uuid: .mock(uuid: uuid))
         try await sut.record(duration: duration, date: date, feedback: feedback)
 
         let expectedCalls = [
-            RecordingSpy.Call(
+            HealthKitRecordingSpy.Call(
                 start: date.addingTimeInterval(-duration), end: date, id: uuid, feedback: feedback?.rawValue ?? ""
             )
         ]
-        #expect(await recordingSpy.calls == expectedCalls)
+        #expect(await healthKitRecordingSpy.calls == expectedCalls)
     }
 
-    @Test(arguments: Feedback.allCases + [nil])
-    func failedRecord(feedback: Feedback?) async throws {
+    // MARK: - Cache Record
+
+    @Test(arguments: [nil] + Feedback.allCases)
+    func cacheRecordSuccess(feedback: Feedback?) async throws {
         let uuid = UUID()
         let duration: TimeInterval = 120
         let date: Date = .now
-        let recordingSpy: RecordingSpy = .healthKitNotRecorded
 
-        let sut = LivePlanxStorage(recording: recordingSpy, uuid: .mock(uuid: uuid))
+        let cacheSpy = CacheSpy.empty
+        let sut = LivePlanxStorage(uuid: .mock(uuid: uuid), cache: cacheSpy)
         try await sut.record(duration: duration, date: date, feedback: feedback)
 
         let expectedCalls = [
-            RecordingSpy.Call(
-                start: date.addingTimeInterval(-duration), end: date, id: uuid, feedback: feedback?.rawValue ?? ""
+            CacheSpy.Call.save(
+                .init(id: .init(uuid), date: .init(date), duration: .init(.init(duration)), feedback: .init(feedback))
             )
         ]
-        #expect(await recordingSpy.calls == expectedCalls)
+        #expect(await cacheSpy.calls == expectedCalls)
+    }
+
+    @Test(arguments: [nil] + Feedback.allCases)
+    func cacheRecordError(feedback: Feedback?) async throws {
+        let uuid = UUID()
+        let duration: TimeInterval = 120
+        let date: Date = .now
+
+        let cacheSpy = CacheSpy.saveError
+        let sut = LivePlanxStorage(uuid: .mock(uuid: uuid), cache: cacheSpy)
+        await #expect(throws: CacheError.saveError) {
+            try await sut.record(duration: duration, date: date, feedback: feedback)
+        }
+
+        let expectedCalls = [
+            CacheSpy.Call.save(
+                .init(id: .init(uuid), date: .init(date), duration: .init(.init(duration)), feedback: .init(feedback))
+            )
+        ]
+        #expect(await cacheSpy.calls == expectedCalls)
     }
 }
 
 // MARK: - Convenience
 
 extension LivePlanxStorage {
-    convenience init(checker: AvailabilityChecking) {
-        self.init(checker: checker, authorizer: .success, loader: .empty, recording: .success, uuid: .mock())
+    convenience init(healthKitChecker: HealthKitAvailabilityChecking) {
+        self.init(
+            healthKitChecker: healthKitChecker,
+            healthKitAuthorizer: .success,
+            healthKitLoader: .empty,
+            healthKitRecording: .success,
+            uuid: .mock(),
+            cache: .empty
+        )
     }
 
-    convenience init(authorizer: Authorizing) {
-        self.init(checker: .available, authorizer: authorizer, loader: .empty, recording: .success, uuid: .mock())
+    convenience init(healthKitAuthorizer: HealthKitAuthorizing) {
+        self.init(
+            healthKitChecker: .available,
+            healthKitAuthorizer: healthKitAuthorizer,
+            healthKitLoader: .empty,
+            healthKitRecording: .success,
+            uuid: .mock(),
+            cache: .empty
+        )
     }
 
-    convenience init(loader: Loading) {
-        self.init(checker: .available, authorizer: .success, loader: loader, recording: .success, uuid: .mock())
+    convenience init(healthKitLoader: HealthKitLoading) {
+        self.init(
+            healthKitChecker: .available,
+            healthKitAuthorizer: .success,
+            healthKitLoader: healthKitLoader,
+            healthKitRecording: .success,
+            uuid: .mock(),
+            cache: .empty
+        )
     }
 
-    convenience init(recording: Recording, uuid: UUIDProviding) {
-        self.init(checker: .available, authorizer: .success, loader: .empty, recording: recording, uuid: uuid)
+    convenience init(healthKitRecording: HealthKitRecording, uuid: UUIDProviding) {
+        self.init(
+            healthKitChecker: .available,
+            healthKitAuthorizer: .success,
+            healthKitLoader: .empty,
+            healthKitRecording: healthKitRecording,
+            uuid: uuid,
+            cache: .empty
+        )
+    }
+
+    convenience init(uuid: UUIDProviding, cache: Cache) {
+        self.init(
+            healthKitChecker: .available,
+            healthKitAuthorizer: .success,
+            healthKitLoader: .empty,
+            healthKitRecording: .success,
+            uuid: uuid,
+            cache: cache
+        )
     }
 }

@@ -7,7 +7,7 @@
 
 import Model
 
-public protocol Cache {
-    func save(_ record: PlankRecord) throws
-    func load() throws -> [PlankRecord]
+public protocol Cache: Sendable {
+    func save(_ record: PlankRecord) async throws
+    func load() async throws -> [PlankRecord]
 }

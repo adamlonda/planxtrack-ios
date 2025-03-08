@@ -18,29 +18,33 @@ extension Dependencies {
         get async {
             let factory = await Dependencies()
                 .withSingleton(HKHealthStore.self) { HKHealthStore() }
-                .withSingleton(Execution.self) { LiveExecution() }
+                .withSingleton(HealthKitExecution.self) { LiveHealthKitExecution() }
 
             await factory
-                .withSingleton(AvailabilityChecking.self) { LiveAvailabilityChecking() }
-                .withSingleton(Authorizing.self) { LiveAuthorizing(healthStore: await factory.resolve()) }
-                .withSingleton(Recording.self) { LiveRecording(healthStore: await factory.resolve()) }
+                .withSingleton(HealthKitAvailabilityChecking.self) { LiveHealthKitAvailabilityChecking() }
+                .withSingleton(HealthKitAuthorizing.self) {
+                    LiveHealthKitAuthorizing(healthStore: await factory.resolve())
+                }
+                .withSingleton(HealthKitRecording.self) { LiveHealthKitRecording(healthStore: await factory.resolve()) }
                 .withSingleton(CalendarProviding.self) { .live }
-                .withSingleton(Loading.self) {
-                    LiveLoading(
+                .withSingleton(HealthKitLoading.self) {
+                    LiveHealthKitLoading(
                         healthStore: await factory.resolve(),
                         exec: await factory.resolve(),
                         calendar: await factory.resolve()
                     )
                 }
                 .withSingleton(UUIDProviding.self) { .live }
+                .withSingleton(Cache.self) { LiveCache() }
 
             return await factory.withSingleton(PlanxStorage.self) {
                 LivePlanxStorage(
-                    checker: await factory.resolve(),
-                    authorizer: await factory.resolve(),
-                    loader: await factory.resolve(),
-                    recording: await factory.resolve(),
-                    uuid: await factory.resolve()
+                    healthKitChecker: await factory.resolve(),
+                    healthKitAuthorizer: await factory.resolve(),
+                    healthKitLoader: await factory.resolve(),
+                    healthKitRecording: await factory.resolve(),
+                    uuid: await factory.resolve(),
+                    cache: await factory.resolve()
                 )
             }
         }
