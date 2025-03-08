@@ -8,6 +8,7 @@
 import Foundation
 import Model
 
+// TODO: Load / Record protocol split 💡
 public protocol PlanxStorage: Sendable {
     func load() async -> [PlankRecord]
     func record(duration: TimeInterval, date: Date, feedback: Feedback?) async throws

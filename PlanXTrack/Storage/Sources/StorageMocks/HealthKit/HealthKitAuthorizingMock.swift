@@ -1,5 +1,5 @@
 //
-//  AuthorizingMock.swift
+//  HealthKitAuthorizingMock.swift
 //  Storage
 //
 //  Created by Adam Londa on 22.12.2024.
@@ -7,21 +7,21 @@
 
 import Storage
 
-final class AuthorizingMock: Authorizing {
+final class HealthKitAuthorizingMock: HealthKitAuthorizing {
     private let result: Result<Void, StorageError>
 
     init(_ result: Result<Void, StorageError>) {
         self.result = result
     }
 
-    func authorizeHealthKit() throws {
+    func authorize() throws {
         if case .failure(let error) = result {
             throw error
         }
     }
 }
 
-extension Authorizing where Self == AuthorizingMock {
+extension HealthKitAuthorizing where Self == HealthKitAuthorizingMock {
     static var success: Self {
         .init(.success(()))
     }

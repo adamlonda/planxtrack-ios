@@ -1,5 +1,5 @@
 //
-//  ExecutionMock.swift
+//  HealthKitExecutionMock.swift
 //  Storage
 //
 //  Created by Adam Londa on 30.12.2024.
@@ -13,7 +13,7 @@ enum MockError: Error {
 }
 
 // periphery:ignore
-public final class ExecutionMock: Execution {
+public final class HealthKitExecutionMock: HealthKitExecution {
     private let result: Result<[HKWorkout], MockError>
 
     init(result: Result<[HKWorkout], MockError>) {
@@ -58,7 +58,7 @@ fileprivate extension [HKWorkout] {
 
 // MARK: - Convenience
 
-public extension Execution where Self == ExecutionMock {
+public extension HealthKitExecution where Self == HealthKitExecutionMock {
     static func success(with workouts: [HKWorkout]) -> Self {
         .init(result: .success(workouts))
     }

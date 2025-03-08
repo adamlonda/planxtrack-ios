@@ -1,5 +1,5 @@
 //
-//  RecordingSpy.swift
+//  HealthKitRecordingSpy.swift
 //  Storage
 //
 //  Created by Adam Londa on 04.01.2025.
@@ -8,7 +8,7 @@
 import Foundation
 import Storage
 
-actor RecordingSpy: Recording {
+actor HealthKitRecordingSpy: HealthKitRecording {
     // periphery:ignore
     struct Call: Equatable {
         let start: Date
@@ -23,7 +23,7 @@ actor RecordingSpy: Recording {
         self.result = result
     }
 
-    func healthKitRecord(from start: Date, to end: Date, id: UUID, feedback: String) async throws {
+    func record(from start: Date, to end: Date, id: UUID, feedback: String) async throws {
         calls.append(.init(start: start, end: end, id: id, feedback: feedback))
         switch result {
         case .success:
@@ -34,7 +34,7 @@ actor RecordingSpy: Recording {
     }
 }
 
-extension Recording where Self == RecordingSpy {
+extension HealthKitRecording where Self == HealthKitRecordingSpy {
     static var success: Self {
         .init(result: .success(()))
     }

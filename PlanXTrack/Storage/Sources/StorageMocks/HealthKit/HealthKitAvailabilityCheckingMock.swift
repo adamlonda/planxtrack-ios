@@ -1,5 +1,5 @@
 //
-//  AvailabilityCheckingMock.swift
+//  HealthKitAvailabilityCheckingMock.swift
 //  Storage
 //
 //  Created by Adam Londa on 20.12.2024.
@@ -7,7 +7,7 @@
 
 import Storage
 
-final class AvailabilityCheckingMock: AvailabilityChecking {
+final class HealthKitAvailabilityCheckingMock: HealthKitAvailabilityChecking {
     private let available: Bool
 
     init(available: Bool) {
@@ -19,7 +19,7 @@ final class AvailabilityCheckingMock: AvailabilityChecking {
     }
 }
 
-extension AvailabilityChecking where Self == AvailabilityCheckingMock {
+extension HealthKitAvailabilityChecking where Self == HealthKitAvailabilityCheckingMock {
     static var available: Self {
         .init(available: true)
     }

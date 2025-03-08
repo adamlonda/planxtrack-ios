@@ -1,5 +1,5 @@
 //
-//  LoadingTests.swift
+//  HealthKitLoadingTests.swift
 //  Storage
 //
 //  Created by Adam Londa on 30.12.2024.
@@ -13,7 +13,7 @@ import ModelMocks
 import StorageMocks
 import Testing
 
-struct LoadingTests {
+struct HealthKitLoadingTests {
 
     // MARK: - Success
 
@@ -50,12 +50,12 @@ struct LoadingTests {
         ]
         let expectedRecords = [today, yesterday]
 
-        let sut = LiveLoading(
+        let sut = LiveHealthKitLoading(
             healthStore: HKHealthStore(),
             exec: .success(with: workouts),
             calendar: .mock(calendar: calendar, now: now)
         )
-        let result = await sut.loadHealthKit()
+        let result = await sut.load()
 
         #expect(result == expectedRecords)
     }
@@ -63,8 +63,8 @@ struct LoadingTests {
     // MARK: - Fail
 
     @Test func failedHealthKitLoad() async {
-        let sut = LiveLoading(healthStore: HKHealthStore(), exec: .failure, calendar: .mock())
-        let result = await sut.loadHealthKit()
+        let sut = LiveHealthKitLoading(healthStore: HKHealthStore(), exec: .failure, calendar: .mock())
+        let result = await sut.load()
         #expect(result.isEmpty)
     }
 }
