@@ -5,7 +5,6 @@
 //  Created by Adam Londa on 08.12.2024.
 //
 
-@testable import Convenience
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
