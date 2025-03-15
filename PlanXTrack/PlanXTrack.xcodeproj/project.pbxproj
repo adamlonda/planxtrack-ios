@@ -6,6 +6,22 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		915FD6BC2D857E8F00CEA20C /* Periphery */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 915FD6BF2D857E8F00CEA20C /* Build configuration list for PBXAggregateTarget "Periphery" */;
+			buildPhases = (
+				915FD6C02D857EB500CEA20C /* Scan */,
+			);
+			dependencies = (
+			);
+			name = Periphery;
+			packageProductDependencies = (
+			);
+			productName = Periphery;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		91AF27432CE8AF5500B99E20 /* UI in Frameworks */ = {isa = PBXBuildFile; productRef = 91AF27422CE8AF5500B99E20 /* UI */; };
 /* End PBXBuildFile section */
@@ -127,6 +143,9 @@
 					9132EB642CDF7EC000286ACE = {
 						CreatedOnToolsVersion = 16.1;
 					};
+					915FD6BC2D857E8F00CEA20C = {
+						CreatedOnToolsVersion = 16.2;
+					};
 				};
 			};
 			buildConfigurationList = 9132EB602CDF7EC000286ACE /* Build configuration list for PBXProject "PlanXTrack" */;
@@ -148,6 +167,7 @@
 			projectRoot = "";
 			targets = (
 				9132EB642CDF7EC000286ACE /* PlanXTrack */,
+				915FD6BC2D857E8F00CEA20C /* Periphery */,
 			);
 		};
 /* End PBXProject section */
@@ -161,6 +181,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		915FD6C02D857EB500CEA20C /* Scan */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Scan;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [[ ! $PATH =~ /opt/homebrew/bin: ]] ; then \n    PATH=/opt/homebrew/bin/:/opt/homebrew/sbin:${PATH}\nfi\nperiphery scan --project \"PlanXTrack.xcodeproj\" --schemes \"PlanXTrack\" --format xcode\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9132EB612CDF7EC000286ACE /* Sources */ = {
@@ -377,6 +418,26 @@
 			};
 			name = Release;
 		};
+		915FD6BD2D857E8F00CEA20C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6KGZ86RN37;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		915FD6BE2D857E8F00CEA20C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 6KGZ86RN37;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -394,6 +455,15 @@
 			buildConfigurations = (
 				9132EB742CDF7EC200286ACE /* Debug */,
 				9132EB752CDF7EC200286ACE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		915FD6BF2D857E8F00CEA20C /* Build configuration list for PBXAggregateTarget "Periphery" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				915FD6BD2D857E8F00CEA20C /* Debug */,
+				915FD6BE2D857E8F00CEA20C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
