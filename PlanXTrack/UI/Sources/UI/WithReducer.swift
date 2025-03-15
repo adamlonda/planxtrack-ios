@@ -12,23 +12,30 @@ struct WithReducer<R: ReducerType, ViewToDisplay: View>: View {
     @State private var store: Store<R>?
 
     private let initialState: R.State
-    private let dependencyBuild: () async -> Dependencies
+    private let dependenciesSetup: () async -> Void
     private let viewToDisplay: (Store<R>) -> ViewToDisplay
 
     init(
         _ initialState: R.State,
-        dependencies: @escaping () async -> Dependencies,
+        dependenciesSetup: @escaping () async -> Void,
         @ViewBuilder display: @escaping (Store<R>) -> ViewToDisplay
     ) {
         self.initialState = initialState
-        self.dependencyBuild = dependencies
+        self.dependenciesSetup = dependenciesSetup
         self.viewToDisplay = display
     }
 
     var body: some View {
-        content.task {
-            store = .init(initialState: initialState, dependencies: await dependencyBuild())
-        }
+        content
+            .task {
+                await dependenciesSetup()
+                store = .init(initialState: initialState)
+            }
+            .onDisappear {
+                Task {
+                    await Dependencies.global.clear()
+                }
+            }
     }
 
     @ViewBuilder private var content: some View {

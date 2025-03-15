@@ -14,35 +14,32 @@ import StorageMocks
 // MARK: - Runtime
 
 extension Dependencies {
-    public static var runtime: Dependencies {
-        get async {
-            let factory = await Dependencies()
-                .withSingleton(HKHealthStore.self) { HKHealthStore() }
-                .withSingleton(Execution.self) { LiveExecution() }
+    public func runtimeSetup() async {
+        await self
+            .withSingleton(HKHealthStore.self) { HKHealthStore() }
+            .withSingleton(Execution.self) { LiveExecution() }
+            .withSingleton(AvailabilityChecking.self) { LiveAvailabilityChecking() }
+            .withSingleton(CalendarProviding.self) { .live }
+            .withSingleton(UUIDProviding.self) { .live }
 
-            await factory
-                .withSingleton(AvailabilityChecking.self) { LiveAvailabilityChecking() }
-                .withSingleton(Authorizing.self) { LiveAuthorizing(healthStore: await factory.resolve()) }
-                .withSingleton(Recording.self) { LiveRecording(healthStore: await factory.resolve()) }
-                .withSingleton(CalendarProviding.self) { .live }
-                .withSingleton(Loading.self) {
-                    LiveLoading(
-                        healthStore: await factory.resolve(),
-                        exec: await factory.resolve(),
-                        calendar: await factory.resolve()
-                    )
-                }
-                .withSingleton(UUIDProviding.self) { .live }
+        await self.withSingleton(Authorizing.self) { LiveAuthorizing(healthStore: await self.resolve()) }
+        await self.withSingleton(Recording.self) { LiveRecording(healthStore: await self.resolve()) }
+        await self.withSingleton(Loading.self) {
+            LiveLoading(
+                healthStore: await self.resolve(),
+                exec: await self.resolve(),
+                calendar: await self.resolve()
+            )
+        }
 
-            return await factory.withSingleton(PlanxStorage.self) {
-                LivePlanxStorage(
-                    checker: await factory.resolve(),
-                    authorizer: await factory.resolve(),
-                    loader: await factory.resolve(),
-                    recording: await factory.resolve(),
-                    uuid: await factory.resolve()
-                )
-            }
+        await self.withSingleton(PlanxStorage.self) {
+            LivePlanxStorage(
+                checker: await self.resolve(),
+                authorizer: await self.resolve(),
+                loader: await self.resolve(),
+                recording: await self.resolve(),
+                uuid: await self.resolve()
+            )
         }
     }
 }
@@ -50,10 +47,8 @@ extension Dependencies {
 // MARK: - Mocks
 
 extension Dependencies {
-    public static var mocked: Dependencies {
-        get async {
-            await Dependencies.runtime
-                .with(PlanxStorage.self) { .emptyLoad }
-        }
+    public func mockedSetup() async {
+        await self.runtimeSetup()
+        self.with(PlanxStorage.self) { .emptyLoad }
     }
 }

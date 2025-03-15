@@ -22,7 +22,7 @@ final class InjectMacroTests: XCTestCase {
             struct MyStruct {
                 var myService: MyService {
                     get async {
-                        await dependencies.resolve(MyService.self)
+                        await Dependencies.global.resolve(MyService.self)
                     }
                 }
             }

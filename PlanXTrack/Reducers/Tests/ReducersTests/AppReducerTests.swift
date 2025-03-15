@@ -11,9 +11,17 @@ import CoreTesting
 @testable import Reducers
 import Testing
 
-@MainActor struct AppReducerTests {
+@MainActor class AppReducerTests {
+    init() async {
+        await Dependencies.global.mockedSetup()
+    }
+
+    deinit {
+        Task { await Dependencies.global.clear() }
+    }
+
     @Test func onAppearEmpty() async {
-        let store = Store<AppReducer>(initialState: .idle, dependencies: await .mocked)
+        let store = Store<AppReducer>(initialState: .idle)
         store.send(.onAppear)
 
         await store.change(of: \.state)

@@ -43,7 +43,7 @@ public struct AppView: View {
 
 #Preview {
     WithReducer(.idle,
-        dependencies: { await .mocked },
+        dependenciesSetup: { await Dependencies.global.mockedSetup() },
         display: { AppView(store: $0) }
     )
 }

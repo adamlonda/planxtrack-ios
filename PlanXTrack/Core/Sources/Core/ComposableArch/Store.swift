@@ -11,9 +11,9 @@ import Foundation
     public private(set) var state: R.State
     private let reducer: R
 
-    public init(initialState: R.State, dependencies: Dependencies) {
+    public init(initialState: R.State) {
         self.state = initialState
-        self.reducer = .init(dependencies: dependencies)
+        self.reducer = .init()
     }
 
     public func send(_ action: R.Action) {

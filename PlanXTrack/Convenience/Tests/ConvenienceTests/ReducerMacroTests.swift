@@ -21,10 +21,7 @@ final class ReducerMacroTests: XCTestCase {
         let expectedOutput = """
         class MyReducer {
 
-            private let dependencies: Dependencies
-
-            public init(dependencies: Dependencies) {
-                self.dependencies = dependencies
+            public init() {
             }
         }
 

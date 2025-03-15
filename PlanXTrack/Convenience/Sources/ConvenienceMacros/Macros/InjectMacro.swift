@@ -9,7 +9,7 @@ import SwiftSyntax
 import SwiftSyntaxMacros
 
 // periphery:ignore
-public struct InjectMacro: AccessorMacro {
+public struct InjectMacro: AccessorMacro { // TODO: Make @Inject work otside of Reducers
     public static func expansion(
         of node: AttributeSyntax,
         providingAccessorsOf declaration: some DeclSyntaxProtocol,
@@ -45,7 +45,7 @@ public struct InjectMacro: AccessorMacro {
 
         let getter: AccessorDeclSyntax = """
         get async {
-            await dependencies.resolve(\(raw: typeIdentifier.text).self)
+            await Dependencies.global.resolve(\(raw: typeIdentifier.text).self)
         }
         """
 

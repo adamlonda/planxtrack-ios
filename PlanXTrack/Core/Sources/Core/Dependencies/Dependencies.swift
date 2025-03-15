@@ -8,16 +8,17 @@
 import Foundation
 
 public actor Dependencies {
+    public static let global: Dependencies = Dependencies() // TODO: Rename to shared?
     public init() {}
 
-    private var factories = [String: () async -> Sendable]()
-    private var singletons = [String: Sendable]()
+    private(set) var factories = [String: @Sendable () async -> Sendable]()
+    private(set) var singletons = [String: Sendable]()
 
     // MARK: - Registration
 
     @discardableResult public func with<T: Sendable>(
         _ type: T.Type,
-        factory: @escaping () async -> T
+        factory: @escaping @Sendable () async -> T
     ) -> Self {
         let key = String(describing: type)
         singletons[key] = nil
@@ -33,6 +34,13 @@ public actor Dependencies {
         singletons[key] = await factory()
         factories[key] = nil
         return self
+    }
+
+    // MARK: - Clear
+
+    public func clear() {
+        singletons.removeAll()
+        factories.removeAll()
     }
 
     // MARK: - Recolving

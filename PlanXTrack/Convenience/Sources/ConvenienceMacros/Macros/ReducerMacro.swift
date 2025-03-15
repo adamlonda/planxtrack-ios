@@ -28,18 +28,11 @@ extension ReducerMacro: MemberMacro {
     ) throws -> [DeclSyntax] {
         try checkClassKeyword(in: declaration)
 
-        let dependencies: DeclSyntax = """
-        private let dependencies: Dependencies
-        """
-
         let initializer: DeclSyntax = """
-        public init(dependencies: Dependencies) {
-            self.dependencies = dependencies
-        }
+        public init() {}
         """
 
         return [
-            dependencies,
             initializer
         ]
     }

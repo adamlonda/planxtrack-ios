@@ -41,6 +41,18 @@ struct DependenciesTests {
         #expect(resolved.id.starts(with: "SPY-") == true)
         #expect(resolvedAnother.id.starts(with: "SPY-") == true)
     }
+
+    @Test func clear() async {
+        let dependencies = await Dependencies()
+            .withSingleton(TestProtocol.self) { TestMock() }
+            .with(AnotherTestProtocol.self) { AnotherTestMock() }
+
+        await dependencies.clear()
+
+        let factories = await dependencies.factories
+        let singletons = await dependencies.singletons
+        #expect(factories.isEmpty && singletons.isEmpty)
+    }
 }
 
 // MARK: - Test Protocols

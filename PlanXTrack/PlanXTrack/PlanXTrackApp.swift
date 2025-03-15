@@ -12,9 +12,12 @@ import SwiftUI
 import UI
 
 @MainActor class AppDependencies: ObservableObject {
-    @Published var loaded: Dependencies?
+    @Published var loaded = false
     init() {
-        Task { loaded = await .runtime }
+        Task {
+            await Dependencies.global.runtimeSetup()
+            loaded = true
+        }
     }
 }
 
@@ -23,9 +26,9 @@ import UI
 
     var body: some Scene {
         WindowGroup {
-            if let dependencies = dependencies.loaded {
+            if dependencies.loaded {
                 AppView(
-                    store: .init(initialState: .idle, dependencies: dependencies)
+                    store: .init(initialState: .idle)
                 )
             } else {
                 ProgressView("Please wait...") // TODO: Localize
