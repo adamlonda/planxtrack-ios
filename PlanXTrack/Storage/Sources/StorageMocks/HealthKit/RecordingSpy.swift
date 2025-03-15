@@ -9,6 +9,7 @@ import Foundation
 import Storage
 
 actor RecordingSpy: Recording {
+    // periphery:ignore
     struct Call: Equatable {
         let start: Date
         let end: Date

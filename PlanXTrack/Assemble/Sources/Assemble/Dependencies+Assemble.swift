@@ -56,9 +56,4 @@ extension Dependencies {
                 .with(PlanxStorage.self) { .emptyLoad }
         }
     }
-
-    public static func mocked(with storage: PlanxStorage) async -> Dependencies {
-        await .mocked
-            .with(PlanxStorage.self) { storage }
-    }
 }

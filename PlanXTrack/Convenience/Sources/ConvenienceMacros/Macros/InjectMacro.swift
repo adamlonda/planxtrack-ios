@@ -8,6 +8,7 @@
 import SwiftSyntax
 import SwiftSyntaxMacros
 
+// periphery:ignore
 public struct InjectMacro: AccessorMacro {
     public static func expansion(
         of node: AttributeSyntax,

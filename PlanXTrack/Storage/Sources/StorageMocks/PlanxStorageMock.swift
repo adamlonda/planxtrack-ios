@@ -22,6 +22,7 @@ public class PlanxStorageMock: PlanxStorage, @unchecked Sendable {
         load
     }
 
+    // periphery:ignore
     public func record(duration: TimeInterval, date: Date, feedback: Feedback?) async throws {
         switch record {
         case .success:

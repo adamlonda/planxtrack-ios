@@ -8,7 +8,6 @@
 import Core
 import HealthKit
 import Model
-import Storage
 @testable import StorageImplementation
 import StorageMocks
 import Testing

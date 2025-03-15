@@ -19,6 +19,7 @@ public final class LiveUUIDProviding: UUIDProviding {
     }
 }
 
+// periphery:ignore
 public final class UUIDProvidingMock: UUIDProviding {
     public let uuid: UUID
 

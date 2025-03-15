@@ -8,6 +8,7 @@
 import SwiftSyntaxMacros
 
 #if canImport(ConvenienceMacros)
+// periphery:ignore
 import ConvenienceMacros
 
 let testMacros: [String: Macro.Type] = [

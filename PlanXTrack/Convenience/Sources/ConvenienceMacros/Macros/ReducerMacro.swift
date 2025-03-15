@@ -10,6 +10,7 @@ import SwiftSyntax
 import SwiftSyntaxMacros
 import SwiftDiagnostics
 
+// periphery:ignore
 public struct ReducerMacro {
     fileprivate static func checkClassKeyword(in declaration: some DeclGroupSyntax) throws {
         guard declaration.as(ClassDeclSyntax.self)?.classKeyword.tokenKind == .keyword(.class) else {

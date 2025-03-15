@@ -12,6 +12,7 @@ enum MockError: Error {
     case mockError
 }
 
+// periphery:ignore
 public final class ExecutionMock: Execution {
     private let result: Result<[HKWorkout], MockError>
 

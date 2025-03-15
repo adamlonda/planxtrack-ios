@@ -17,6 +17,7 @@ public final class LiveCalendarProviding: CalendarProviding {
     public var now: Date { .now }
 }
 
+// periphery:ignore
 public final class CalendarProvidingMock: CalendarProviding {
     public let current: Calendar
     public let now: Date
