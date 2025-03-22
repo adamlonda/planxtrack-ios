@@ -16,6 +16,7 @@ let package = Package(
         ),
     ],
     dependencies: [
+        .package(name: "Convenience", path: "../Convenience"),
         .package(name: "Core", path: "../Core"),
         .package(name: "Model", path: "../Model"),
         .package(url: "https://github.com/realm/SwiftLint", from: "0.57.1")
@@ -40,6 +41,7 @@ let package = Package(
             name: "StorageImplementation",
             dependencies: [
                 "Storage",
+                .product(name: "Convenience", package: "Convenience"),
                 .product(name: "Core", package: "Core"),
                 .product(name: "Model", package: "Model")
             ],

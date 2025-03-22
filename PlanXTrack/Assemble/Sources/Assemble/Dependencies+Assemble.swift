@@ -21,17 +21,10 @@ extension Dependencies {
             .withSingleton(AvailabilityChecking.self) { LiveAvailabilityChecking() }
             .withSingleton(CalendarProviding.self) { .live }
             .withSingleton(UUIDProviding.self) { .live }
+            .withSingleton(Authorizing.self) { LiveAuthorizing() }
+            .withSingleton(Loading.self) { LiveLoading() }
 
-        await self.withSingleton(Authorizing.self) { LiveAuthorizing(healthStore: await self.resolve()) }
         await self.withSingleton(Recording.self) { LiveRecording(healthStore: await self.resolve()) }
-        await self.withSingleton(Loading.self) {
-            LiveLoading(
-                healthStore: await self.resolve(),
-                exec: await self.resolve(),
-                calendar: await self.resolve()
-            )
-        }
-
         await self.withSingleton(PlanxStorage.self) {
             LivePlanxStorage(
                 checker: await self.resolve(),

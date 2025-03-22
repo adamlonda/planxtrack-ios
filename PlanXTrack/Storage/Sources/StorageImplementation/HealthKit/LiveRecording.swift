@@ -12,6 +12,7 @@ import Storage
 public final class LiveRecording: Recording {
     private let healthStore: HKHealthStore
 
+    // TODO: Use @Inject instead
     public init(healthStore: HKHealthStore) {
         self.healthStore = healthStore
     }

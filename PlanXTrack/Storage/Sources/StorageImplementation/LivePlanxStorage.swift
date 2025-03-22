@@ -20,7 +20,7 @@ public final class LivePlanxStorage: PlanxStorage {
 
     // MARK: - Init
 
-    public init(
+    public init( // TODO: Use @Inject instead
         checker: AvailabilityChecking,
         authorizer: Authorizing,
         loader: Loading,

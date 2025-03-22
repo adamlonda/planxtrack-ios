@@ -5,24 +5,20 @@
 //  Created by Adam Londa on 22.12.2024.
 //
 
+import Convenience
+import Core
 import HealthKit
 import Storage
 
 public final class LiveAuthorizing: Authorizing {
-    private let healthStore: HKHealthStore
+    @Inject private var healthStore: HKHealthStore
 
     private let readTypes: Set<HKSampleType> = [HKObjectType.workoutType()]
     private let writeTypes: Set<HKSampleType> = [HKObjectType.workoutType()]
 
-    public init(healthStore: HKHealthStore) {
-        self.healthStore = healthStore
-    }
+    public init() {}
 
     public func authorizeHealthKit() async throws {
-        do {
-            try await healthStore.requestAuthorization(toShare: writeTypes, read: readTypes)
-        } catch {
-            throw StorageError.unauthorizedHealthKitAccess
-        }
+        try await healthStore.requestAuthorization(toShare: writeTypes, read: readTypes)
     }
 }
