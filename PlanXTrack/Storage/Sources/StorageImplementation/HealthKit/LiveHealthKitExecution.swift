@@ -8,10 +8,8 @@
 import HealthKit
 import Storage
 
-public final class LiveHealthKitExecution: HealthKitExecution {
-    public init() {}
-
-    public func execute<T>(
+final class LiveHealthKitExecution: HealthKitExecution {
+    func execute<T>(
         _ descriptor: HKSampleQueryDescriptor<T>,
         with healthStore: HKHealthStore
     ) async throws -> [T] {

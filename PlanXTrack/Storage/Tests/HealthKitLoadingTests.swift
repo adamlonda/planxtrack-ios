@@ -5,10 +5,11 @@
 //  Created by Adam Londa on 30.12.2024.
 //
 
-import Core
+import Dependencies
 import HealthKit
 import Model
 import ModelMocks
+import Storage
 @testable import StorageImplementation
 import StorageMocks
 import Testing
@@ -50,11 +51,7 @@ struct HealthKitLoadingTests {
         ]
         let expectedRecords = [today, yesterday]
 
-        let sut = LiveHealthKitLoading(
-            healthStore: HKHealthStore(),
-            exec: .success(with: workouts),
-            calendar: .mock(calendar: calendar, now: now)
-        )
+        let sut = LiveHealthKitLoading.with(exec: .success(with: workouts), now: now, calendar: calendar)
         let result = await sut.load()
 
         #expect(result == expectedRecords)
@@ -63,13 +60,29 @@ struct HealthKitLoadingTests {
     // MARK: - Fail
 
     @Test func failedHealthKitLoad() async {
-        let sut = LiveHealthKitLoading(healthStore: HKHealthStore(), exec: .failure, calendar: .mock())
+        let sut = LiveHealthKitLoading.with(exec: .failure)
         let result = await sut.load()
         #expect(result.isEmpty)
     }
 }
 
 // MARK: - Convenience
+
+private extension LiveHealthKitLoading {
+    static func with(
+        exec: HealthKitExecution,
+        now: Date = .now,
+        calendar: Calendar = .current
+    ) -> LiveHealthKitLoading {
+        withDependencies {
+            $0.healthKitExecution = exec
+            $0.date.now = now
+            $0.calendar = calendar
+        } operation: {
+            LiveHealthKitLoading()
+        }
+    }
+}
 
 private extension HKWorkout {
     convenience init(

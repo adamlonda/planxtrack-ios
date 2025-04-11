@@ -5,11 +5,11 @@
 //  Created by Adam Londa on 20.12.2024.
 //
 
-import Core
+import Dependencies
 import Foundation
 import Model
 import Storage
-import StorageImplementation
+@testable import StorageImplementation
 @testable import StorageMocks
 import Testing
 
@@ -17,19 +17,19 @@ struct StorageTests {
     // MARK: - HealthKit Load
 
     @Test func loadHealthKitNotAvailable() async {
-        let sut = LivePlanxStorage(healthKitChecker: .unavailable)
+        let sut = LivePlanxStorage.with(healthKitChecker: .unavailable)
         let records = await sut.load()
         #expect(records.isEmpty)
     }
 
     @Test func loadHealthKitUnauthorized() async {
-        let sut = LivePlanxStorage(healthKitAuthorizer: .failure)
+        let sut = LivePlanxStorage.with(healthKitAuthorizer: .failure)
         let records = await sut.load()
         #expect(records.isEmpty)
     }
 
     @Test func loadHealthKitSuccess() async {
-        let sut = LivePlanxStorage(healthKitLoader: .empty)
+        let sut = LivePlanxStorage.with(healthKitLoader: .empty)
         let records = await sut.load()
         #expect(records.isEmpty)
     }
@@ -42,7 +42,7 @@ struct StorageTests {
         let duration: TimeInterval = 120
         let date: Date = .now
 
-        let sut = LivePlanxStorage(healthKitRecording: healthKitRecordingSpy, uuid: .mock(uuid: uuid))
+        let sut = LivePlanxStorage.with(healthKitRecording: healthKitRecordingSpy, uuid: uuid)
         try await sut.record(duration: duration, date: date, feedback: feedback)
 
         let expectedCalls = [
@@ -62,7 +62,7 @@ struct StorageTests {
         let date: Date = .now
 
         let cacheSpy = CacheSpy.empty
-        let sut = LivePlanxStorage(uuid: .mock(uuid: uuid), cache: cacheSpy)
+        let sut = LivePlanxStorage.with(uuid: uuid, cache: cacheSpy)
         try await sut.record(duration: duration, date: date, feedback: feedback)
 
         let expectedCalls = [
@@ -80,7 +80,7 @@ struct StorageTests {
         let date: Date = .now
 
         let cacheSpy = CacheSpy.saveError
-        let sut = LivePlanxStorage(uuid: .mock(uuid: uuid), cache: cacheSpy)
+        let sut = LivePlanxStorage.with(uuid: uuid, cache: cacheSpy)
         await #expect(throws: CacheError.saveError) {
             try await sut.record(duration: duration, date: date, feedback: feedback)
         }
@@ -96,59 +96,24 @@ struct StorageTests {
 
 // MARK: - Convenience
 
-extension LivePlanxStorage {
-    convenience init(healthKitChecker: HealthKitAvailabilityChecking) {
-        self.init(
-            healthKitChecker: healthKitChecker,
-            healthKitAuthorizer: .success,
-            healthKitLoader: .empty,
-            healthKitRecording: .success,
-            uuid: .mock(),
-            cache: .empty
-        )
-    }
-
-    convenience init(healthKitAuthorizer: HealthKitAuthorizing) {
-        self.init(
-            healthKitChecker: .available,
-            healthKitAuthorizer: healthKitAuthorizer,
-            healthKitLoader: .empty,
-            healthKitRecording: .success,
-            uuid: .mock(),
-            cache: .empty
-        )
-    }
-
-    convenience init(healthKitLoader: HealthKitLoading) {
-        self.init(
-            healthKitChecker: .available,
-            healthKitAuthorizer: .success,
-            healthKitLoader: healthKitLoader,
-            healthKitRecording: .success,
-            uuid: .mock(),
-            cache: .empty
-        )
-    }
-
-    convenience init(healthKitRecording: HealthKitRecording, uuid: UUIDProviding) {
-        self.init(
-            healthKitChecker: .available,
-            healthKitAuthorizer: .success,
-            healthKitLoader: .empty,
-            healthKitRecording: healthKitRecording,
-            uuid: uuid,
-            cache: .empty
-        )
-    }
-
-    convenience init(uuid: UUIDProviding, cache: Cache) {
-        self.init(
-            healthKitChecker: .available,
-            healthKitAuthorizer: .success,
-            healthKitLoader: .empty,
-            healthKitRecording: .success,
-            uuid: uuid,
-            cache: cache
-        )
+private extension LivePlanxStorage {
+    static func with(
+        healthKitChecker: HealthKitAvailabilityChecking = .available,
+        healthKitAuthorizer: HealthKitAuthorizing = .success,
+        healthKitLoader: HealthKitLoading = .empty,
+        healthKitRecording: HealthKitRecording = .success,
+        uuid: UUID = .init(),
+        cache: Cache = .empty
+    ) -> LivePlanxStorage {
+        withDependencies {
+            $0.healthKitAvailabilityChecking = healthKitChecker
+            $0.healthKitAuthorizing = healthKitAuthorizer
+            $0.healthKitLoading = healthKitLoader
+            $0.healthKitRecording = healthKitRecording
+            $0.uuid = .constant(uuid)
+            $0.cache = cache
+        } operation: {
+            LivePlanxStorage()
+        }
     }
 }

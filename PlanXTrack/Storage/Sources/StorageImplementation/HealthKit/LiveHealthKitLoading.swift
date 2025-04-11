@@ -5,25 +5,20 @@
 //  Created by Adam Londa on 28.12.2024.
 //
 
-import Core
+import Dependencies
 import HealthKit
 import Model
 import Storage
 
-public final class LiveHealthKitLoading: HealthKitLoading {
-    private let healthStore: HKHealthStore
-    private let exec: HealthKitExecution
-    private let calendar: CalendarProviding
+actor LiveHealthKitLoading: HealthKitLoading {
+    @Dependency(\.hkHealthStore) private var healthStore
+    @Dependency(\.healthKitExecution) private var exec
+    @Dependency(\.date) private var date
+    @Dependency(\.calendar) private var calendar
 
-    public init(healthStore: HKHealthStore, exec: HealthKitExecution, calendar: CalendarProviding) {
-        self.healthStore = healthStore
-        self.exec = exec
-        self.calendar = calendar
-    }
-
-    public func load() async -> [PlankRecord] {
-        let now = calendar.now
-        let threeWeeksAgo = calendar.current.date(byAdding: .day, value: -21, to: now)!
+    func load() async -> [PlankRecord] {
+        let now = date.now
+        let threeWeeksAgo = calendar.date(byAdding: .day, value: -21, to: now)!
 
         let datePredicate = HKQuery.predicateForSamples(
             withStart: threeWeeksAgo,

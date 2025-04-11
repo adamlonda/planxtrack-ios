@@ -12,7 +12,6 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(name: "Assemble", path: "../Assemble"),
         .package(name: "Reducers", path: "../Reducers"),
         .package(url: "https://github.com/realm/SwiftLint", from: "0.57.1")
     ],
@@ -20,7 +19,6 @@ let package = Package(
         .target(
             name: "UI",
             dependencies: [
-                .product(name: "Assemble", package: "Assemble"),
                 .product(name: "Reducers", package: "Reducers")
             ],
             plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]

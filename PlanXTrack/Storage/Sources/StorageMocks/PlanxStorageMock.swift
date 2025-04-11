@@ -9,6 +9,7 @@ import Foundation
 import Model
 import Storage
 
+// periphery:ignore
 public class PlanxStorageMock: PlanxStorage, @unchecked Sendable {
     private let load: [PlankRecord]
     private let record: Result<Void, StorageError>
@@ -22,7 +23,6 @@ public class PlanxStorageMock: PlanxStorage, @unchecked Sendable {
         load
     }
 
-    // periphery:ignore
     public func record(duration: TimeInterval, date: Date, feedback: Feedback?) async throws {
         switch record {
         case .success:
@@ -33,14 +33,8 @@ public class PlanxStorageMock: PlanxStorage, @unchecked Sendable {
     }
 }
 
-public final class EmptyLoadPlanxStorageMock: PlanxStorageMock, @unchecked Sendable {
-    public convenience init() {
-        self.init(load: [])
-    }
-}
-
 public extension PlanxStorage where Self == PlanxStorageMock {
     static var emptyLoad: Self {
-        EmptyLoadPlanxStorageMock()
+        .init(load: [])
     }
 }

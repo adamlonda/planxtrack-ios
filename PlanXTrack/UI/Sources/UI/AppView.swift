@@ -5,9 +5,10 @@
 //  Created by Adam Londa on 16.11.2024.
 //
 
-import Assemble
 import Core
+import Dependencies
 import Reducers
+import StorageMocks
 import SwiftUI
 
 public struct AppView: View {
@@ -42,8 +43,11 @@ public struct AppView: View {
 // MARK: - Previews
 
 #Preview {
-    WithReducer(.idle,
-        dependencies: { await .mocked },
-        display: { AppView(store: $0) }
+    AppView(
+        store: withDependencies {
+            $0.planxStorage = .emptyLoad
+        } operation: {
+            Store<AppReducer>(initialState: .idle)
+        }
     )
 }

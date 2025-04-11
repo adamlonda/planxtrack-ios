@@ -5,42 +5,23 @@
 //  Created by Adam Londa on 17.11.2024.
 //
 
-import Core
+import Dependencies
 import Foundation
 import Model
 import Storage
 
-public final class LivePlanxStorage: PlanxStorage {
-    private let healthKitChecker: HealthKitAvailabilityChecking
-    private let healthKitAuthorizer: HealthKitAuthorizing
-    private let healthKitLoader: HealthKitLoading
-    private let healthKitRecording: HealthKitRecording
-
-    private let uuid: UUIDProviding
-    private let cache: Cache
-
-    // MARK: - Init
-
-    public init(
-        healthKitChecker: HealthKitAvailabilityChecking,
-        healthKitAuthorizer: HealthKitAuthorizing,
-        healthKitLoader: HealthKitLoading,
-        healthKitRecording: HealthKitRecording,
-        uuid: UUIDProviding,
-        cache: Cache
-    ) {
-        self.healthKitChecker = healthKitChecker
-        self.healthKitAuthorizer = healthKitAuthorizer
-        self.healthKitLoader = healthKitLoader
-        self.healthKitRecording = healthKitRecording
-        self.uuid = uuid
-        self.cache = cache
-    }
+actor LivePlanxStorage: PlanxStorage {
+    @Dependency(\.healthKitAvailabilityChecking) private var healthKitChecker
+    @Dependency(\.healthKitAuthorizing) private var healthKitAuthorizer
+    @Dependency(\.healthKitLoading) private var healthKitLoader
+    @Dependency(\.healthKitRecording) private var healthKitRecording
+    @Dependency(\.cache) private var cache
+    @Dependency(\.uuid) private var uuid
 
     // MARK: - Load
 
     // TODO: Load from cache as well 🚧
-    public func load() async -> [PlankRecord] {
+    func load() async -> [PlankRecord] {
         guard healthKitChecker.isHealthKitAvailable else {
             return []
         }
@@ -54,8 +35,8 @@ public final class LivePlanxStorage: PlanxStorage {
 
     // MARK: - Record
 
-    public func record(duration: TimeInterval, date: Date, feedback: Feedback?) async throws {
-        let id = uuid.get()
+    func record(duration: TimeInterval, date: Date, feedback: Feedback?) async throws {
+        let id = uuid()
 
         async let healthKitTask: Void = healthKitRecording.record(
             from: date.addingTimeInterval(-duration),

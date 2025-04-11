@@ -12,7 +12,6 @@ import SwiftSyntaxMacros
 import ConvenienceMacros
 
 let testMacros: [String: Macro.Type] = [
-    "Inject": InjectMacro.self,
     "Reducer": ReducerMacro.self
 ]
 #endif

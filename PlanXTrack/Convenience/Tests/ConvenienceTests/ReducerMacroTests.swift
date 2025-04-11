@@ -21,14 +21,42 @@ final class ReducerMacroTests: XCTestCase {
         let expectedOutput = """
         class MyReducer {
 
-            private let dependencies: Dependencies
-
-            public init(dependencies: Dependencies) {
-                self.dependencies = dependencies
+            public init() {
             }
         }
 
-        extension MyReducer: ReducerType {
+        extension MyReducer: Reducer {
+        }
+
+        extension MyReducer: Sendable {
+        }
+        """
+
+        assertMacroExpansion(
+            source,
+            expandedSource: expectedOutput,
+            macros: testMacros
+        )
+        #else
+        throw XCTSkip("macros are only supported when running tests for the host platform")
+        #endif
+    }
+
+    func testReducerMacroWithActor() throws {
+        #if canImport(ConvenienceMacros)
+        let source = """
+        @Reducer actor MyReducer {
+        }
+        """
+
+        let expectedOutput = """
+        actor MyReducer {
+
+            public init() {
+            }
+        }
+
+        extension MyReducer: Reducer {
         }
 
         extension MyReducer: Sendable {
@@ -62,12 +90,12 @@ final class ReducerMacroTests: XCTestCase {
             expandedSource: expectedOutput,
             diagnostics: [
                 DiagnosticSpec(
-                    message: "`@Reducer` can only be applied to class declarations.",
+                    message: "`@Reducer` can only be applied to class or actor declarations.",
                     line: 1,
                     column: 1
                 ),
                 DiagnosticSpec(
-                    message: "`@Reducer` can only be applied to class declarations.",
+                    message: "`@Reducer` can only be applied to class or actor declarations.",
                     line: 1,
                     column: 1
                 )
@@ -96,12 +124,12 @@ final class ReducerMacroTests: XCTestCase {
                 expandedSource: expectedOutput,
                 diagnostics: [
                     DiagnosticSpec(
-                        message: "`@Reducer` can only be applied to class declarations.",
+                        message: "`@Reducer` can only be applied to class or actor declarations.",
                         line: 1,
                         column: 1
                     ),
                     DiagnosticSpec(
-                        message: "`@Reducer` can only be applied to class declarations.",
+                        message: "`@Reducer` can only be applied to class or actor declarations.",
                         line: 1,
                         column: 1
                     )
@@ -130,12 +158,12 @@ final class ReducerMacroTests: XCTestCase {
                 expandedSource: expectedOutput,
                 diagnostics: [
                     DiagnosticSpec(
-                        message: "`@Reducer` can only be applied to class declarations.",
+                        message: "`@Reducer` can only be applied to class or actor declarations.",
                         line: 1,
                         column: 1
                     ),
                     DiagnosticSpec(
-                        message: "`@Reducer` can only be applied to class declarations.",
+                        message: "`@Reducer` can only be applied to class or actor declarations.",
                         line: 1,
                         column: 1
                     )
@@ -164,12 +192,12 @@ final class ReducerMacroTests: XCTestCase {
                 expandedSource: expectedOutput,
                 diagnostics: [
                     DiagnosticSpec(
-                        message: "`@Reducer` can only be applied to class declarations.",
+                        message: "`@Reducer` can only be applied to class or actor declarations.",
                         line: 1,
                         column: 1
                     ),
                     DiagnosticSpec(
-                        message: "`@Reducer` can only be applied to class declarations.",
+                        message: "`@Reducer` can only be applied to class or actor declarations.",
                         line: 1,
                         column: 1
                     )

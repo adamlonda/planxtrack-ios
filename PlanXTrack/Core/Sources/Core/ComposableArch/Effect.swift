@@ -5,7 +5,7 @@
 //  Created by Adam Londa on 10.11.2024.
 //
 
-public enum Effect<Action> {
+public enum Effect<Action>: Sendable {
     case none
     case async(_ execute: @Sendable () async -> Action)
 }

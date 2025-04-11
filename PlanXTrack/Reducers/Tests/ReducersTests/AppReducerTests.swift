@@ -5,15 +5,20 @@
 //  Created by Adam Londa on 17.11.2024.
 //
 
-import Assemble
 import Core
 import CoreTesting
+import Dependencies
 @testable import Reducers
+import StorageMocks
 import Testing
 
 @MainActor struct AppReducerTests {
     @Test func onAppearEmpty() async {
-        let store = Store<AppReducer>(initialState: .idle, dependencies: await .mocked)
+        let store = withDependencies {
+            $0.planxStorage = .emptyLoad
+        } operation: {
+            Store<AppReducer>(initialState: .idle)
+        }
         store.send(.onAppear)
 
         await store.change(of: \.state)

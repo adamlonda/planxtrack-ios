@@ -7,13 +7,13 @@
 
 import Foundation
 
-@MainActor @Observable public final class Store<R: ReducerType> {
+@MainActor @Observable public final class Store<R: Reducer> {
     public private(set) var state: R.State
     private let reducer: R
 
-    public init(initialState: R.State, dependencies: Dependencies) {
+    public init(initialState: R.State) {
         self.state = initialState
-        self.reducer = .init(dependencies: dependencies)
+        self.reducer = .init()
     }
 
     public func send(_ action: R.Action) {
@@ -23,7 +23,9 @@ import Foundation
     }
 
     private func dispatch(_ action: R.Action) async {
-        let effect = reducer.reduce(state: &state, action: action)
+        var currentState = state
+        let effect = await reducer.reduce(state: &currentState, action: action)
+        state = currentState
 
         switch effect {
         case .none:

@@ -7,11 +7,13 @@
 
 import Convenience
 import Core
+import Dependencies
 import Model
 import Storage
+import StorageImplementation
 
-@Reducer public final class AppReducer {
-    public enum State: Equatable {
+@Reducer public actor AppReducer {
+    public enum State: Equatable, Sendable {
         case idle
         case loading
         case loaded([PlankRecord])
@@ -20,11 +22,11 @@ import Storage
         case onAppear
         case display([PlankRecord])
     }
-    @Inject var storage: PlanxStorage
+    @Dependency(\.planxStorage) var storage
 
     // MARK: - Reduce Methods
 
-    public func reduce(state: inout State, action: Action) -> Effect<Action> {
+    public func reduce(state: inout State, action: Action) async -> Effect<Action> {
         switch action {
         case .onAppear:
             return reduceOnAppear(&state)

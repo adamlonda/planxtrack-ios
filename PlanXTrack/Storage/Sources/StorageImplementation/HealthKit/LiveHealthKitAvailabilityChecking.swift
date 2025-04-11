@@ -8,10 +8,8 @@
 import HealthKit
 import Storage
 
-public final class LiveHealthKitAvailabilityChecking: HealthKitAvailabilityChecking {
-    public init() {}
-
-    public var isHealthKitAvailable: Bool {
+final class LiveHealthKitAvailabilityChecking: HealthKitAvailabilityChecking {
+    var isHealthKitAvailable: Bool {
         HKHealthStore.isHealthDataAvailable()
     }
 }

@@ -10,11 +10,11 @@ import Model
 import Storage
 import SwiftData
 
-public final class LiveCache: Cache {
+final class LiveCache: Cache {
 
     private let container: ModelContainer?
 
-    public convenience init() {
+    convenience init() {
         self.init(nonPersistent: false)
     }
 
@@ -27,7 +27,7 @@ public final class LiveCache: Cache {
         self.container = container
     }
 
-    public func save(_ record: PlankRecord) throws {
+    func save(_ record: PlankRecord) throws {
         guard let container else {
             throw CacheError.saveError
         }
@@ -36,7 +36,7 @@ public final class LiveCache: Cache {
         try context.save()
     }
 
-    public func load() throws -> [PlankRecord] {
+    func load() throws -> [PlankRecord] {
         guard let container else {
             throw CacheError.loadError
         }

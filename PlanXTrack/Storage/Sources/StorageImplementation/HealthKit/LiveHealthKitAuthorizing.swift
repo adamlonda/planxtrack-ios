@@ -5,20 +5,17 @@
 //  Created by Adam Londa on 22.12.2024.
 //
 
+import Dependencies
 import HealthKit
 import Storage
 
-public final class LiveHealthKitAuthorizing: HealthKitAuthorizing {
-    private let healthStore: HKHealthStore
+actor LiveHealthKitAuthorizing: HealthKitAuthorizing {
+    @Dependency(\.hkHealthStore) private var healthStore
 
     private let readTypes: Set<HKSampleType> = [HKObjectType.workoutType()]
     private let writeTypes: Set<HKSampleType> = [HKObjectType.workoutType()]
 
-    public init(healthStore: HKHealthStore) {
-        self.healthStore = healthStore
-    }
-
-    public func authorize() async throws {
+    func authorize() async throws {
         do {
             try await healthStore.requestAuthorization(toShare: writeTypes, read: readTypes)
         } catch {
