@@ -23,10 +23,12 @@ import StorageImplementation
         case display([PlankRecord])
     }
     @Dependency(\.planxStorage) var storage
+}
 
-    // MARK: - Reduce Methods
+// MARK: - Reduce Methods
 
-    public func reduce(state: inout State, action: Action) async -> Effect<Action> {
+nonisolated extension AppReducer {
+    public func reduce(state: inout State, action: Action) -> Effect<Action> {
         switch action {
         case .onAppear:
             return reduceOnAppear(&state)

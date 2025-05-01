@@ -24,7 +24,7 @@ import Foundation
 
     private func dispatch(_ action: R.Action) async {
         var currentState = state
-        let effect = await reducer.reduce(state: &currentState, action: action)
+        let effect = reducer.reduce(state: &currentState, action: action)
         state = currentState
 
         switch effect {

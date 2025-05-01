@@ -10,5 +10,5 @@ public protocol Reducer: Sendable {
     associatedtype Action: Sendable
 
     init()
-    func reduce(state: inout State, action: Action) async -> Effect<Action>
+    func reduce(state: inout State, action: Action) -> Effect<Action>
 }
