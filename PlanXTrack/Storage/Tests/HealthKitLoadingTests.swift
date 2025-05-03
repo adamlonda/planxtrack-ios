@@ -18,7 +18,7 @@ struct HealthKitLoadingTests {
 
     // MARK: - Success
 
-    @Test(arguments: Feedback.allCases + [nil])
+    @Test(arguments: Feedback.allCasesWithNil)
     func successfulHealthKitLoad(expectedFeedback: Feedback?) async {
         let now = Date.now
         let calendar = Calendar.current

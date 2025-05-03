@@ -12,7 +12,7 @@ import Storage
 import Testing
 
 struct LiveCacheTests {
-    @Test(arguments: Feedback.allCases + [nil])
+    @Test(arguments: Feedback.allCasesWithNil)
     func saveAndLoad(expectedFeedback: Feedback?) throws {
         let now = Date.now
         let calendar = Calendar.current

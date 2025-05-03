@@ -36,13 +36,22 @@ struct StorageTests {
 
     // MARK: - HealthKit Record
 
-    @Test(arguments: zip([nil] + Feedback.allCases, [HealthKitRecordingSpy.success, .healthKitNotRecorded]))
-    func healthKitRecord(feedback: Feedback?, healthKitRecordingSpy: HealthKitRecordingSpy) async throws {
+    @Test(arguments: Feedback.allCasesWithNil)
+    func healthKitRecorded(feedback: Feedback?) async throws {
+        try await healthKitTestWith(feedback: feedback, healthKitRecording: .success)
+    }
+
+    @Test(arguments: Feedback.allCasesWithNil)
+    func healthKitNotRecorded(feedback: Feedback?) async throws {
+        try await healthKitTestWith(feedback: feedback, healthKitRecording: .healthKitNotRecorded)
+    }
+
+    private func healthKitTestWith(feedback: Feedback?, healthKitRecording: HealthKitRecordingSpy) async throws {
         let uuid = UUID()
         let duration: TimeInterval = 120
         let date: Date = .now
 
-        let sut = LivePlanxStorage.with(healthKitRecording: healthKitRecordingSpy, uuid: uuid)
+        let sut = LivePlanxStorage.with(healthKitRecording: healthKitRecording, uuid: uuid)
         try await sut.record(duration: duration, date: date, feedback: feedback)
 
         let expectedCalls = [
@@ -50,12 +59,12 @@ struct StorageTests {
                 start: date.addingTimeInterval(-duration), end: date, id: uuid, feedback: feedback?.rawValue ?? ""
             )
         ]
-        #expect(await healthKitRecordingSpy.calls == expectedCalls)
+        #expect(await healthKitRecording.calls == expectedCalls)
     }
 
     // MARK: - Cache Record
 
-    @Test(arguments: [nil] + Feedback.allCases)
+    @Test(arguments: Feedback.allCasesWithNil)
     func cacheRecordSuccess(feedback: Feedback?) async throws {
         let uuid = UUID()
         let duration: TimeInterval = 120
@@ -73,7 +82,7 @@ struct StorageTests {
         #expect(await cacheSpy.calls == expectedCalls)
     }
 
-    @Test(arguments: [nil] + Feedback.allCases)
+    @Test(arguments: Feedback.allCasesWithNil)
     func cacheRecordError(feedback: Feedback?) async throws {
         let uuid = UUID()
         let duration: TimeInterval = 120
