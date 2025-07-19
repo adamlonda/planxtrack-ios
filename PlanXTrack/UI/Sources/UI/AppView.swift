@@ -7,7 +7,10 @@
 
 import Core
 import Dependencies
+import Model
+import ModelMocks
 import Reducers
+import Storage
 import StorageMocks
 import SwiftUI
 
@@ -36,18 +39,43 @@ public struct AppView: View {
             Text("No data, yet")
         case .loaded(let data):
             Text("Loaded \(data.count) items")
+        case .error(let error):
+            Text("An error occurred: \(error.localizedDescription)")
         }
     }
 }
 
 // MARK: - Previews
 
-#Preview {
-    AppView(
-        store: withDependencies {
-            $0.planxStorage = .emptyLoad
-        } operation: {
-            Store<AppReducer>(initialState: .idle)
-        }
-    )
+fileprivate extension AppView {
+    init(_ planxStorage: PlanxStorage) {
+        self.init(
+            store: withDependencies {
+                $0.planxStorage = planxStorage
+            } operation: {
+                Store<AppReducer>(initialState: .idle)
+            }
+        )
+    }
+}
+
+#Preview("Empty") {
+    AppView(.loadSuccessful([]))
+}
+
+#Preview("Loaded") {
+    let now = Date.now
+    let items = [
+        PlankRecord.today(now: now, feedback: .perfect),
+        PlankRecord.yesterday(now: now, calendar: .current, feedback: .hard)
+    ]
+    AppView(.loadSuccessful(items))
+}
+
+#Preview("Loading Error") {
+    AppView(.loadFailed(.unauthorizedHealthKitAccess))
+}
+
+#Preview("Loading") {
+    AppView(.neverLoading)
 }

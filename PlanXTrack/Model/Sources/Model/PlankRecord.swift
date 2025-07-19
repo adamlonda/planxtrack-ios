@@ -9,7 +9,7 @@ import Foundation
 import Tagged
 import TaggedTime
 
-public struct PlankRecord: Sendable, Equatable, Identifiable {
+public struct PlankRecord: Sendable, Equatable, Identifiable, Hashable {
     public typealias Duration = Tagged<Self, Seconds<TimeInterval>>
     public typealias Date = Tagged<Self, Foundation.Date>
     public typealias Feedback = Tagged<Self, Model.Feedback?>

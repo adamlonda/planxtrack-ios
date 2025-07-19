@@ -11,16 +11,24 @@ import Storage
 
 // periphery:ignore
 public class PlanxStorageMock: PlanxStorage, @unchecked Sendable {
-    private let load: [PlankRecord]
+    private let load: Result<[PlankRecord], StorageError>
     private let record: Result<Void, StorageError>
 
-    init(load: [PlankRecord], record: Result<Void, StorageError> = .success(())) {
+    init(
+        load: Result<[PlankRecord], StorageError> = .success([]),
+        record: Result<Void, StorageError> = .success(())
+    ) {
         self.load = load
         self.record = record
     }
 
-    public func load() async -> [PlankRecord] {
-        load
+    public func load() async throws -> [PlankRecord] {
+        switch load {
+        case .success(let records):
+            return records
+        case .failure(let error):
+            throw error
+        }
     }
 
     public func record(duration: TimeInterval, date: Date, feedback: Feedback?) async throws {
@@ -34,7 +42,10 @@ public class PlanxStorageMock: PlanxStorage, @unchecked Sendable {
 }
 
 public extension PlanxStorage where Self == PlanxStorageMock {
-    static var emptyLoad: Self {
-        .init(load: [])
+    static func loadSuccessful(_ records: [PlankRecord]) -> Self {
+        return .init(load: .success(records))
+    }
+    static func loadFailed(_ error: StorageError) -> Self {
+        return .init(load: .failure(error))
     }
 }

@@ -45,7 +45,13 @@ extension Cache where Self == CacheSpy {
     static var empty: Self {
         return .init(saveResult: .success(()), loadResult: .success([]))
     }
+    static func loaded(_ records: [PlankRecord]) -> Self {
+        .init(saveResult: .success(()), loadResult: .success(records))
+    }
     static var saveError: Self {
         return .init(saveResult: .failure(CacheError.saveError), loadResult: .success([]))
+    }
+    static var loadError: Self {
+        return .init(saveResult: .success(()), loadResult: .failure(CacheError.loadError))
     }
 }

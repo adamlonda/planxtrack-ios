@@ -20,8 +20,22 @@ actor LivePlanxStorage: PlanxStorage {
 
     // MARK: - Load
 
-    // TODO: Load from cache as well 🚧
-    func load() async -> [PlankRecord] {
+    func load() async throws -> [PlankRecord] {
+        async let healthKitTask = loadHealthKit()
+        async let cacheTask = cache.load()
+
+        do {
+            let (healthKit, cache) = try await (healthKitTask, cacheTask)
+            let merged = Set(healthKit + cache)
+            return merged.sorted { $0.date > $1.date }
+        } catch {
+            let healthKit = await healthKitTask
+            if healthKit.isEmpty { throw error }
+            return healthKit
+        }
+    }
+
+    private func loadHealthKit() async -> [PlankRecord] {
         guard healthKitChecker.isHealthKitAvailable else {
             return []
         }

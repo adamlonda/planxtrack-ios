@@ -24,4 +24,7 @@ extension HealthKitLoading where Self == HealthKitLoadingMock {
     static var empty: Self {
         .init(result: [])
     }
+    static func some(_ records: [PlankRecord]) -> Self {
+        .init(result: records)
+    }
 }

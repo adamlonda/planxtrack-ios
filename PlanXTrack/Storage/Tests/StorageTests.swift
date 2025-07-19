@@ -14,24 +14,88 @@ import Storage
 import Testing
 
 struct StorageTests {
-    // MARK: - HealthKit Load
+    // MARK: - HealthKit Errors
 
-    @Test func loadHealthKitNotAvailable() async {
+    @Test func loadHealthKitNotAvailable() async throws {
         let sut = LivePlanxStorage.with(healthKitChecker: .unavailable)
-        let records = await sut.load()
+        let records = try await sut.load()
         #expect(records.isEmpty)
     }
 
-    @Test func loadHealthKitUnauthorized() async {
+    @Test func loadHealthKitUnauthorized() async throws {
         let sut = LivePlanxStorage.with(healthKitAuthorizer: .failure)
-        let records = await sut.load()
+        let records = try await sut.load()
         #expect(records.isEmpty)
     }
 
-    @Test func loadHealthKitSuccess() async {
-        let sut = LivePlanxStorage.with(healthKitLoader: .empty)
-        let records = await sut.load()
-        #expect(records.isEmpty)
+    // MARK: - Cache Errors
+
+    @Test func loadCacheErrorWithNoHealthkit() async throws {
+        let sut = LivePlanxStorage.with(healthKitLoader: .empty, cache: .loadError)
+        await #expect(throws: CacheError.loadError) {
+            try await sut.load()
+        }
+    }
+
+    @Test(arguments: Feedback.allCasesWithNil)
+    func loadCacheErrorWithSomeHealthkit(feedback: Feedback?) async throws {
+        let now = Date.now
+        let expectedRecords: [PlankRecord] = [
+            PlankRecord.today(now: now, feedback: feedback),
+            PlankRecord.yesterday(now: now, calendar: Calendar.current, feedback: feedback)
+        ]
+        let sut = LivePlanxStorage.with(healthKitLoader: .some(expectedRecords), cache: .loadError)
+        let records = try await sut.load()
+        #expect(records == expectedRecords)
+    }
+
+    // MARK: - Successful Load
+
+    fileprivate struct Config {
+        let healthKitResult: [PlankRecord]
+        let cacheResult: [PlankRecord]
+        let expected: [PlankRecord]
+    }
+
+    @Test(arguments: Feedback.allCasesWithNil)
+    func loadSuccess(feedback: Feedback?) async throws {
+        let now = Date.now
+        let today = PlankRecord.today(now: now, feedback: feedback)
+        let yesterday = PlankRecord.yesterday(now: now, calendar: Calendar.current, feedback: feedback)
+        let map: [Config] = [
+            .init(healthKitResult: [today, yesterday], cacheResult: [today, yesterday], expected: [today, yesterday]),
+            .init(healthKitResult: [today, yesterday], cacheResult: [today], expected: [today, yesterday]),
+            .init(healthKitResult: [today, yesterday], cacheResult: [yesterday], expected: [today, yesterday]),
+            .init(healthKitResult: [today, yesterday], cacheResult: [], expected: [today, yesterday]),
+            .init(healthKitResult: [today], cacheResult: [today, yesterday], expected: [today, yesterday]),
+            .init(healthKitResult: [today], cacheResult: [today], expected: [today]),
+            .init(healthKitResult: [today], cacheResult: [yesterday], expected: [today, yesterday]),
+            .init(healthKitResult: [today], cacheResult: [], expected: [today]),
+            .init(healthKitResult: [yesterday], cacheResult: [today, yesterday], expected: [today, yesterday]),
+            .init(healthKitResult: [yesterday], cacheResult: [today], expected: [today, yesterday]),
+            .init(healthKitResult: [yesterday], cacheResult: [yesterday], expected: [yesterday]),
+            .init(healthKitResult: [yesterday], cacheResult: [], expected: [yesterday]),
+            .init(healthKitResult: [], cacheResult: [today, yesterday], expected: [today, yesterday]),
+            .init(healthKitResult: [], cacheResult: [today], expected: [today]),
+            .init(healthKitResult: [], cacheResult: [yesterday], expected: [yesterday]),
+            .init(healthKitResult: [], cacheResult: [], expected: [])
+        ]
+        try await withThrowingTaskGroup { group in
+            map.forEach { config in
+                group.addTask {
+                    try await loadSuccessTestWith(config)
+                }
+            }
+            try await group.waitForAll()
+        }
+    }
+
+    private func loadSuccessTestWith(_ config: Config) async throws {
+        let sut = LivePlanxStorage.with(
+            healthKitLoader: .some(config.healthKitResult), cache: .loaded(config.cacheResult)
+        )
+        let records = try await sut.load()
+        #expect(records == config.expected)
     }
 
     // MARK: - HealthKit Record
