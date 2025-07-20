@@ -5,19 +5,23 @@ on:
     types: [opened, synchronize]
 
 permissions:
-  contents: read
+  issues: write
   pull-requests: write
+  contents: read
 
 jobs:
-  review:
+  code_review_job:
     runs-on: ubuntu-latest
+    name: ChatGPT Code Review
     steps:
-      - uses: actions/checkout@v3
-      - name: Run ChatGPT code review
-        uses: cirolini/genai-code-review@v2
+      - name: ChatGPT GitHub Actions
+        uses: dlidstrom/genai-code-review@v3
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           github_pr_id: ${{ github.event.number }}
-          openai_model: gpt-3.5-turbo
+          openai_model: "gpt-4o"
           openai_temperature: 0.5
+          openai_max_tokens: 2048
+          mode: files
+          language: en
