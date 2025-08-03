@@ -8,7 +8,7 @@
 public struct EquatableError: Error, Equatable {
     public let error: Error
 
-    init(_ error: Error) {
+    public init(_ error: Error) {
         self.error = error
     }
 

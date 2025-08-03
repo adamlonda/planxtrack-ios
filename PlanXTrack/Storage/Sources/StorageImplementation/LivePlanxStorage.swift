@@ -52,16 +52,16 @@ actor LivePlanxStorage: PlanxStorage {
     func record(duration: TimeInterval, date: Date, feedback: Feedback?) async throws {
         let id = uuid()
         try await withThrowingTaskGroup {
-            $0.addTask { [weak self] in
-                try? await self?.healthKitRecording.record(
+            $0.addTask {
+                try? await self.healthKitRecording.record(
                     from: date.addingTimeInterval(-duration),
                     to: date,
                     id: id,
                     feedback: feedback?.rawValue ?? ""
                 )
             }
-            $0.addTask { [weak self] in
-                try await self?.cache.save(
+            $0.addTask {
+                try await self.cache.save(
                     PlankRecord(
                         id: .init(id),
                         date: .init(date),

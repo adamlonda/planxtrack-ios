@@ -20,7 +20,7 @@ struct LiveCacheTests {
         let today = PlankRecord.today(now: now, feedback: expectedFeedback)
         let yesterday = PlankRecord.yesterday(now: now, calendar: calendar, feedback: expectedFeedback)
 
-        let sut = LiveCache(nonPersistent: true)
+        let sut = LiveCache(inMemoryOnly: true)
 
         try sut.save(yesterday)
         try sut.save(today)

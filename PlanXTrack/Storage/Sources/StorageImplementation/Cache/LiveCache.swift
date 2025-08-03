@@ -15,11 +15,11 @@ final class LiveCache: Cache {
     private let container: ModelContainer?
 
     convenience init() {
-        self.init(nonPersistent: false)
+        self.init(inMemoryOnly: false)
     }
 
-    convenience init(nonPersistent: Bool) {
-        let configuration = ModelConfiguration(for: PlankRecordCacheModel.self, isStoredInMemoryOnly: nonPersistent)
+    convenience init(inMemoryOnly: Bool) {
+        let configuration = ModelConfiguration(for: PlankRecordCacheModel.self, isStoredInMemoryOnly: inMemoryOnly)
         self.init(container: try? ModelContainer(for: PlankRecordCacheModel.self, configurations: configuration))
     }
 
