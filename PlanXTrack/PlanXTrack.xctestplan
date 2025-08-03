@@ -27,17 +27,6 @@
       "selectedTests" : {
         "suites" : [
           {
-            "name" : "AssembleTests",
-            "testFunctions" : [
-              "authorizingType()",
-              "availabilityCheckingType()",
-              "executionType()",
-              "healthKitStoreType()",
-              "loadingType()",
-              "planxStorageType()"
-            ]
-          },
-          {
             "name" : "DependenciesTests",
             "testFunctions" : [
               "dependenciesOverride()",
@@ -46,13 +35,6 @@
           }
         ],
         "xctestClasses" : [
-          {
-            "name" : "AssembleTests",
-            "xctestMethods" : [
-              "availabilityCheckingType()",
-              "planxStorageType()"
-            ]
-          },
           {
             "name" : "DependenciesTests",
             "xctestMethods" : [
@@ -80,13 +62,6 @@
         "containerPath" : "container:Storage",
         "identifier" : "StorageTests",
         "name" : "StorageTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Assemble",
-        "identifier" : "AssembleTests",
-        "name" : "AssembleTests"
       }
     }
   ],

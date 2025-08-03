@@ -1,4 +1,4 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 6.1
 
 import PackageDescription
 
@@ -12,10 +12,10 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(name: "Assemble", path: "../Assemble"),
         .package(name: "Convenience", path: "../Convenience"),
         .package(name: "Core", path: "../Core"),
         .package(name: "Storage", path: "../Storage"),
+        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.0.0"),
         .package(url: "https://github.com/realm/SwiftLint", from: "0.57.1")
     ],
     targets: [
@@ -24,6 +24,7 @@ let package = Package(
             dependencies: [
                 .product(name: "Convenience", package: "Convenience"),
                 .product(name: "Core", package: "Core"),
+                .product(name: "Dependencies", package: "swift-dependencies"),
                 .product(name: "Storage", package: "Storage")
             ],
             plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
@@ -32,7 +33,6 @@ let package = Package(
             name: "ReducersTests",
             dependencies: [
                 "Reducers",
-                .product(name: "Assemble", package: "Assemble")
             ],
             plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
         ),

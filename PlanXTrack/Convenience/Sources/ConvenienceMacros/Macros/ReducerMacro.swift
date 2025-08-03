@@ -10,11 +10,21 @@ import SwiftSyntax
 import SwiftSyntaxMacros
 import SwiftDiagnostics
 
+fileprivate extension DeclGroupSyntax {
+    var isClass: Bool {
+        self.as(ClassDeclSyntax.self)?.classKeyword.tokenKind == .keyword(.class)
+    }
+
+    var isActor: Bool {
+        self.as(ActorDeclSyntax.self)?.actorKeyword.tokenKind == .keyword(.actor)
+    }
+}
+
 // periphery:ignore
 public struct ReducerMacro {
-    fileprivate static func checkClassKeyword(in declaration: some DeclGroupSyntax) throws {
-        guard declaration.as(ClassDeclSyntax.self)?.classKeyword.tokenKind == .keyword(.class) else {
-            throw MacroError.invalidUsage("`@Reducer` can only be applied to class declarations.")
+    fileprivate static func checkClassOrActorKeyword(in declaration: some DeclGroupSyntax) throws {
+        guard declaration.isClass || declaration.isActor else {
+            throw MacroError.invalidUsage("`@Reducer` can only be applied to class or actor declarations.")
         }
     }
 }
@@ -26,20 +36,14 @@ extension ReducerMacro: MemberMacro {
         conformingTo protocols: [TypeSyntax],
         in context: some MacroExpansionContext
     ) throws -> [DeclSyntax] {
-        try checkClassKeyword(in: declaration)
-
-        let dependencies: DeclSyntax = """
-        private let dependencies: Dependencies
-        """
+        try checkClassOrActorKeyword(in: declaration)
 
         let initializer: DeclSyntax = """
-        public init(dependencies: Dependencies) {
-            self.dependencies = dependencies
+        public init() {
         }
         """
 
         return [
-            dependencies,
             initializer
         ]
     }
@@ -53,13 +57,13 @@ extension ReducerMacro: ExtensionMacro {
         conformingTo protocols: [TypeSyntax],
         in context: some MacroExpansionContext
     ) throws -> [ExtensionDeclSyntax] {
-        try checkClassKeyword(in: declaration)
+        try checkClassOrActorKeyword(in: declaration)
 
-        let reducerTypeExtension = try ExtensionDeclSyntax("extension \(type.trimmed): ReducerType {}")
+        let reducerExtension = try ExtensionDeclSyntax("extension \(type.trimmed): Reducer {}")
         let sendableExtension = try ExtensionDeclSyntax("extension \(type.trimmed): Sendable {}")
 
         return [
-            reducerTypeExtension,
+            reducerExtension,
             sendableExtension
         ]
     }

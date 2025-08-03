@@ -2,7 +2,7 @@
 
 ## Prerequisities
 
-- Xcode 16.2 (16C5032a)
+- Xcode 16.4 (16F6)
 - [Periphery](https://github.com/peripheryapp/periphery) for an unused code detection
   
     ```bash

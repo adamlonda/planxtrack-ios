@@ -4,14 +4,8 @@
 // periphery:ignore
 import Core
 
-@attached(accessor)
-public macro Inject() = #externalMacro(
-    module: "ConvenienceMacros",
-    type: "InjectMacro"
-)
-
 @attached(member, names: named(dependencies), named(init))
-@attached(extension, conformances: ReducerType, Sendable)
+@attached(extension, conformances: Reducer, Sendable)
 public macro Reducer() = #externalMacro(
     module: "ConvenienceMacros",
     type: "ReducerMacro"

@@ -54,20 +54,6 @@
                BlueprintName = "CoreTests"
                ReferencedContainer = "container:Core">
             </BuildableReference>
-            <SelectedTests>
-               <Test
-                  Identifier = "AssembleTests/availabilityCheckingType()">
-               </Test>
-               <Test
-                  Identifier = "AssembleTests/planxStorageType()">
-               </Test>
-               <Test
-                  Identifier = "DependenciesTests/dependenciesOverride()">
-               </Test>
-               <Test
-                  Identifier = "DependenciesTests/registeredDependencies()">
-               </Test>
-            </SelectedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">
@@ -89,22 +75,13 @@
                ReferencedContainer = "container:Storage">
             </BuildableReference>
          </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AssembleTests"
-               BuildableName = "AssembleTests"
-               BlueprintName = "AssembleTests"
-               ReferencedContainer = "container:Assemble">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      enableThreadSanitizer = "YES"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"

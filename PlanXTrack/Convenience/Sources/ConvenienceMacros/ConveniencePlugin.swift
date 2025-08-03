@@ -11,7 +11,6 @@ import SwiftSyntaxMacros
 @main
 struct ConveniencePlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
-        InjectMacro.self,
         ReducerMacro.self
     ]
 }

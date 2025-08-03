@@ -10,3 +10,9 @@ public enum Feedback: String, Sendable, CaseIterable {
     case perfect
     case hard
 }
+
+public extension Feedback {
+    static var allCasesWithNil: [Feedback?] {
+        Feedback.allCases + [nil]
+    }
+}
