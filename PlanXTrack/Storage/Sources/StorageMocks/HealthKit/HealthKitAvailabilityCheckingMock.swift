@@ -7,14 +7,14 @@
 
 import Storage
 
-final class HealthKitAvailabilityCheckingMock: HealthKitAvailabilityChecking {
+public final class HealthKitAvailabilityCheckingMock: HealthKitAvailabilityChecking {
     private let available: Bool
 
     init(available: Bool) {
         self.available = available
     }
 
-    var isHealthKitAvailable: Bool {
+    public var isHealthKitAvailable: Bool {
         available
     }
 }
@@ -23,7 +23,7 @@ extension HealthKitAvailabilityChecking where Self == HealthKitAvailabilityCheck
     static var available: Self {
         .init(available: true)
     }
-    static var unavailable: Self {
+    public static var unavailable: Self {
         .init(available: false)
     }
 }

@@ -10,7 +10,7 @@ import HealthKit
 import Storage
 
 extension DependencyValues {
-    var healthKitAvailabilityChecking: HealthKitAvailabilityChecking {
+    public var healthKitAvailabilityChecking: HealthKitAvailabilityChecking {
         get { self[HealthKitAvailabilityCheckingValueKey.self] }
         set { self[HealthKitAvailabilityCheckingValueKey.self] = newValue }
     }
